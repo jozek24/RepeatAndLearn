@@ -13,6 +13,8 @@ namespace RepeatAndLearn.ViewModel
 {
     class MyViewModel :BindableBase
     {
+        const string apiKey = "trnsl.1.1.20190821T170155Z.fafa71ea078787a0.bbbe06c23ca22760e5f05eb512ae2b37f7c110f1";
+
         private string _wordToTranslate = "House";
         public string WordToTranslate
         {
@@ -35,8 +37,6 @@ namespace RepeatAndLearn.ViewModel
 
         private void Execute()
         {
-            const string apiKey = "trnsl.1.1.20190821T170155Z.fafa71ea078787a0.bbbe06c23ca22760e5f05eb512ae2b37f7c110f1";
-
             var client = new RestClient("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + apiKey);
             var request = new RestRequest(Method.GET);
             request.AddParameter("text", WordToTranslate);
