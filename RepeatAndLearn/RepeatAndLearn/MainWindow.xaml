@@ -7,15 +7,26 @@
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Repeat And Learn" Height="450" Width="800"
-        ResizeMode="CanResizeWithGrip">
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen">
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Content="settings" />
+            <Button Content="settings" Command="{Binding ApiExecuteCommand}"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions> 
+
+        <TextBox  controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." controls:TextBoxHelper.ClearTextButton="True" />
+        <Button Content="Szukaj" Grid.Column="1" Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"></Button>
     </Grid>
 </controls:MetroWindow>

@@ -81,9 +81,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Dictionary.cs" />
+    <Compile Include="Model\DictionaryResponse.cs" />
     <Compile Include="ViewModel\MyViewModel.cs" />
-    <Compile Include="Model\YandexApi.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -30,3 +30,5 @@ C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\obj\Debug\R
 C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\obj\Debug\RepeatAndLearn.csproj.CopyComplete
 C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\obj\Debug\RepeatAndLearn.exe
 C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\obj\Debug\RepeatAndLearn.pdb
+C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\bin\Debug\RestSharp.dll
+C:\Users\Józef\Desktop\RepeatAndLearn\RepeatAndLearn\RepeatAndLearn\bin\Debug\RestSharp.xml
