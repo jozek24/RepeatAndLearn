@@ -19,9 +19,16 @@ namespace RepeatAndLearn.ViewModel
             get => _wordToTranslate;
             set => SetProperty(ref _wordToTranslate, value);
         }
+
+        private string _translatedWord;
+        public string TranslatedWord
+        {
+            get => _translatedWord;
+            set => SetProperty(ref _translatedWord, value);
+        }
         public MyViewModel()
         {
-            ApiExecuteCommand = new DelegateCommand(Execute).ObservesProperty(()=>WordToTranslate);
+            ApiExecuteCommand = new DelegateCommand(Execute);
         }
 
         public ICommand ApiExecuteCommand { get; }
@@ -37,7 +44,7 @@ namespace RepeatAndLearn.ViewModel
 
             var response = client.Execute<DictionaryResponse>(request);
             if (response.IsSuccessful)
-                Console.WriteLine(response.Data.Text[0]);
+                TranslatedWord = response.Data.Text[0];
         }
     }
 }

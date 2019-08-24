@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RepeatAndLearn"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Repeat And Learn" Height="450" Width="800"
         ResizeMode="CanResizeWithGrip"
@@ -12,7 +13,7 @@
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <Button Content="settings" Command="{Binding ApiExecuteCommand}"/>
+            <Button Content="settings"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
@@ -24,10 +25,12 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"/>
             <ColumnDefinition/>
-        </Grid.ColumnDefinitions> 
+        </Grid.ColumnDefinitions>
 
-        <TextBox  controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." controls:TextBoxHelper.ClearTextButton="True" />
-        <Button Content="Szukaj" Grid.Column="1"  Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"></Button>
-
+        <TextBox Text="{Binding WordToTranslate, Mode=OneWayToSource}" controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." controls:TextBoxHelper.ClearTextButton="True" />
+        <Button  Command="{Binding ApiExecuteCommand}" Content="{iconPacks:Modern magnify}" Grid.Column="1" Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"/>
+        <TextBlock Grid.Row="1" Text="{Binding TranslatedWord}"></TextBlock>
+      
+     
     </Grid>
 </controls:MetroWindow>
