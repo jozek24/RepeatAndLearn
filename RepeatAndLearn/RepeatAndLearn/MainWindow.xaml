@@ -55,6 +55,11 @@
                                 Content="{iconPacks:Modern ArrowUpDown}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Grid.Row="2" Command="{Binding AddWordCommand}"
+                                MinHeight="40" MinWidth="40"
+                                Content="{iconPacks:Modern Add}"
+                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
 
                     </Grid>

@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\DictionaryResponse.cs" />
     <Compile Include="ViewModel\MyViewModel.cs" />
+    <Compile Include="Model\Word.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
