@@ -1,0 +1,72 @@
+﻿<controls:MetroWindow x:Class="RepeatAndLearn.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RepeatAndLearn"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Title="Repeat And Learn" Height="450" Width="500"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen">
+
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Button Content="settings"/>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+
+    <Grid>
+
+        <controls:MetroAnimatedTabControl >
+
+            <TabItem Header="Powtórki">
+                <StackPanel>
+                    <Button>df</Button>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Tłumaczenie" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.RowSpan="2" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button  Grid.Row="0"  
+                                MinHeight="40" MinWidth="40" 
+                                Command="{Binding ApiExecuteCommand}" 
+                                Content="{iconPacks:Modern magnify}" 
+                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
+                                VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                        <Button Grid.Row="1" Command="{Binding ApiExecuteCommand}" 
+                                MinHeight="40" MinWidth="40"
+                                Content="{iconPacks:Modern ArrowUpDown}"
+                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+                    </Grid>
+                    <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
+                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
+                              controls:TextBoxHelper.ClearTextButton="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Dodaj słówka" />
+        </controls:MetroAnimatedTabControl>
+
+    </Grid>
+</controls:MetroWindow>
