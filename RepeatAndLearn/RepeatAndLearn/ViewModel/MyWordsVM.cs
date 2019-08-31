@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using RepeatAndLearn.Model;
 using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
 {
-    class MyWordsVM :BindableBase
+    class MyWordsVM : BindableBase
     {
         private string _plWordToAdd;
         public string PlWordToAdd
@@ -26,7 +27,7 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _enWordToAdd, value);
         }
 
-        private bool _canAddNewWord = false;
+        private bool _canAddNewWord = true;
         public bool CanAddNewWord
         {
             get => _canAddNewWord;
@@ -52,23 +53,28 @@ namespace RepeatAndLearn.ViewModel
 
         private void AddMyNewWord()
         {
-            if (!(CheckIfCanAddMyNewWord())) return;
-
-            string sqlWordInsert = "INSERT INTO Words VALUES(@PlWord,@EnWord,@NowDate,0,0);";
+            if (!CheckIfCanAddMyNewWord()) return;
 
             using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+              "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
-                var addWord = connection.Execute(
-                    sqlWordInsert,
-                    new
-                    {
-                        PlWord = PlWordToAdd,
-                        EnWord = EnWordToAdd,
-                        NowDate = DateTime.Now
-                    });
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    param.Add("@plWord", PlWordToAdd.ToLower().Trim());
+                    param.Add("@enWord", EnWordToAdd.ToLower().Trim());
+                    param.Add("@dateOfNextRepeat", DateTime.Now);
+                    param.Add("@currentAmountOfRepeats", 0);
+                    param.Add("@totalAmountOfRepeats", 0);
 
+                    connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
+
             GlobalSettings.UpdateListOfWords();
             CanAddNewWord = false;
             CanDeleteWord = true;
@@ -76,18 +82,21 @@ namespace RepeatAndLearn.ViewModel
 
         private void DeleteMyOldWord()
         {
-            string sqlWordDelete = "DELETE FROM Words WHERE(@PlWord,@EnWord);";
-
             using (var connection = new SqlConnection(
                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
-                var addWord = connection.Execute(
-                    sqlWordDelete,
-                    new
-                    {
-                        PlWord = PlWordToAdd,
-                        EnWord = EnWordToAdd
-                    });
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    param.Add("@plWord", PlWordToAdd);
+                    param.Add("@enWord", EnWordToAdd);
+
+                    connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
 
             }
             GlobalSettings.UpdateListOfWords();

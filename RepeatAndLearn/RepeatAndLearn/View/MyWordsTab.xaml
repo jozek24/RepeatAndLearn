@@ -20,13 +20,13 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
+            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding PlWordToAdd, Mode=OneWayToSource}" 
                               controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
                               controls:TextBoxHelper.ClearTextButton="True">
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding EnWordToAdd, Mode=OneWayToSource}"></TextBox>
         </GroupBox>
 
         <StackPanel Grid.Row="1" Grid.Column="1" 

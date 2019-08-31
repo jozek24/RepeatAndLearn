@@ -4,10 +4,12 @@ using Prism.Mvvm;
 using RepeatAndLearn.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -112,44 +114,56 @@ namespace RepeatAndLearn.ViewModel
 
         private void UpdateListOnCorrectAnswer()
         {
-            string sqlWordUpdate = "UPDATE Words " +
-                   "SET DateOfNextRepeat=@nextRepeatDate, CurrentAmountOfRepeats=0, TotalAmountOfRepeats=@totalRepeatsAmount " +
-                   "WHERE IdWord=@idOfWord;";
-
             using (var connection = new SqlConnection(
                 "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
-                var updateWord = connection.Execute(
-                          sqlWordUpdate,
-                          new
-                          {
-                              nextRepeatDate = listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    param.Add("@idOfWord ", listOfRepeatsToDo[_randomNumber].IdWord);
+                    param.Add(
+                        "@dateOfNextRepeat ", 
+                        listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
                               .AddDays(DaysToNextRepeat(
                                   listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
                                   listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats)
-                                  ),
-                              totalRepeatsAmount = listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats++,
-                              idOfWord = listOfRepeatsToDo[_randomNumber].IdWord
-                          });
+                                  ));
+                    param.Add("@totalAmountOfRepeats ", listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats++);
+
+                    connection.Execute("UpdateWordOnCorrect", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
         private void UpdateListOnWrongAnswer()
         {
-            string sqlWordUpdate = "UPDATE Words " +
-                   "SET CurrentAmountOfRepeats=@currenRepeatsAmount" +
-                   "WHERE IdWord=@idOfWord;";
-
+          
             using (var connection = new SqlConnection(
                 "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
-                var updateWord = connection.Execute(
-                          sqlWordUpdate,
-                          new
-                          {
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    param.Add("@idOfWord", listOfRepeatsToDo[_randomNumber].IdWord);
+                    
+                    param.Add(
+                        "@dateOfNextRepeat",DateTime.Now);
+                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].IdWord);
+                    connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
+                    connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+
                               currenRepeatsAmount = listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats++,
-                              idOfWord = listOfRepeatsToDo[_randomNumber].IdWord
-                          });
+                     
             }
         }
 

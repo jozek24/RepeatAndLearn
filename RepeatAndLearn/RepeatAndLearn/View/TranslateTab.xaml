@@ -40,14 +40,14 @@
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Grid.Row="2" 
-                                Command="{Binding AddWordCommand}"
+                                Command="{Binding AddTranslatedWordCommand}"
                                 IsEnabled="{Binding CanAddNewWord}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Grid.Row="3" 
-                                Command="{Binding DeleteWordCommand}"
+                                Command="{Binding DeleteTranslatedWordCommand}"
                                 IsEnabled="{Binding CanDeleteWord}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"

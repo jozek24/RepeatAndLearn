@@ -5,10 +5,12 @@ using RepeatAndLearn.Model;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -53,20 +55,21 @@ namespace RepeatAndLearn.ViewModel
         public TranslateVM()
         {
             ApiExecuteCommand = new DelegateCommand(Execute);
-
+            LanguageDirectionCommand = new DelegateCommand(ChangeLanguageDirection);
             AddTranslatedWordCommand = new DelegateCommand(AddTranslatedNewWord);
             DeleteTranslatedWordCommand = new DelegateCommand(DeleteTranslatedOldWord);
-            LanguageDirectionCommand = new DelegateCommand(ChangeLanguageDirection);
+
         }
 
-
+        public ICommand ApiExecuteCommand { get; }
+        public ICommand LanguageDirectionCommand { get; }
         public ICommand AddTranslatedWordCommand { get; }
         public ICommand DeleteTranslatedWordCommand { get; }
-        public ICommand LanguageDirectionCommand { get; }
-        public ICommand ApiExecuteCommand { get; }
+
         private void Execute()
         {
-            var client = new RestClient("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + GlobalSettings.ApiKey);
+            var client = new RestClient(
+                "https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + GlobalSettings.ApiKey);
             var request = new RestRequest(Method.GET);
             request.AddParameter("text", WordToTranslate);
             request.AddParameter("lang", LanguageDirection);
@@ -77,82 +80,6 @@ namespace RepeatAndLearn.ViewModel
 
             CheckIfCanAddTranslatedNewWord();
         }
-
-
-        private void ChangeLanguageDirection()
-        {
-            LanguageDirection = (LanguageDirection == "en-pl") ? "pl-en" : "en-pl";
-        }
-
-        private void AddTranslatedNewWord()
-        {
-            string sqlWordInsert = "INSERT INTO Words VALUES(@PlWord,@EnWord,@NowDate,0,0);";
-
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                if (LanguageDirection == "en-pl")
-                {
-                    var addWord = connection.Execute(
-                        sqlWordInsert,
-                        new
-                        {
-                            PlWord = TranslatedWord,
-                            EnWord = WordToTranslate,
-                            NowDate = DateTime.Now
-                        });
-                }
-                else
-                {
-                    var addWord = connection.Execute(
-                            sqlWordInsert,
-                            new
-                            {
-                                PlWord = WordToTranslate,
-                                EnWord = TranslatedWord,
-                                NowDate = DateTime.Now
-                            });
-                }
-            }
-            GlobalSettings.UpdateListOfWords();
-            CanAddNewWord = false;
-            CanDeleteWord = true;
-        }
-
-        private void DeleteTranslatedOldWord()
-        {
-            string sqlWordDelete = "DELETE FROM Words WHERE(@PlWord,@EnWord);";
-
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                if (LanguageDirection == "en-pl")
-                {
-                    var deleteWord = connection.Execute(
-                        sqlWordDelete,
-                        new
-                        {
-                            PlWord = TranslatedWord,
-                            EnWord = WordToTranslate
-                        });
-                }
-                else
-                {
-                    var deleteWord = connection.Execute(
-                            sqlWordDelete,
-                            new
-                            {
-                                PlWord = WordToTranslate,
-                                EnWord = TranslatedWord,
-                                NowDate = DateTime.Now
-                            });
-                }
-            }
-           GlobalSettings.UpdateListOfWords();
-            CanAddNewWord = true;
-            CanDeleteWord = false;
-        }
-
         private void CheckIfCanAddTranslatedNewWord()
         {
             if (LanguageDirection == "en-pl")
@@ -182,6 +109,86 @@ namespace RepeatAndLearn.ViewModel
                 CanDeleteWord = false;
             }
         }
+        private void ChangeLanguageDirection()
+        {
+            LanguageDirection = (LanguageDirection == "en-pl") ? "pl-en" : "en-pl";
+        }
+
+        private void AddTranslatedNewWord()
+        {
+            using (var connection = new SqlConnection(
+                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+            {
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    if (LanguageDirection == "en-pl")
+                    {
+                        param.Add("@plWord", TranslatedWord.ToLower().Trim());
+                        param.Add("@enWord", WordToTranslate.ToLower().Trim());
+                        param.Add("@dateOfNextRepeat", DateTime.Now);
+                        param.Add("@currentAmountOfRepeats", 0);
+                        param.Add("@totalAmountOfRepeats", 0);
+
+                        connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
+                    }
+                    else
+                    {
+                        param.Add("@plWord", WordToTranslate.ToLower().Trim());
+                        param.Add("@enWord", TranslatedWord.ToLower().Trim());
+                        param.Add("@dateOfNextRepeat", DateTime.Now);
+                        param.Add("@currentAmountOfRepeats", 0);
+                        param.Add("@totalAmountOfRepeats", 0);
+
+                        connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            GlobalSettings.UpdateListOfWords();
+            CanAddNewWord = false;
+            CanDeleteWord = true;
+        }
+
+
+        private void DeleteTranslatedOldWord()
+        {
+           
+            using (var connection = new SqlConnection(
+                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+            {
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    if (LanguageDirection == "en-pl")
+                    {
+                        param.Add("@plWord", TranslatedWord);
+                        param.Add("@enWord", WordToTranslate);
+
+                        connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
+                    }
+                    else
+                    {
+                        param.Add("@plWord", WordToTranslate);
+                        param.Add("@enWord", TranslatedWord);
+
+                        connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            GlobalSettings.UpdateListOfWords();
+            CanAddNewWord = true;
+            CanDeleteWord = false;
+        }
+
 
     }
 }
