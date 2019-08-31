@@ -89,7 +89,6 @@
     </ApplicationDefinition>
     <Compile Include="Model\DictionaryResponse.cs" />
     <Compile Include="Model\GlobalSettings.cs" />
-    <Compile Include="ViewModel\MyViewModel.cs" />
     <Compile Include="Model\Word.cs" />
     <Compile Include="ViewModel\MyWordsVM.cs" />
     <Compile Include="ViewModel\RepeatsVM.cs" />

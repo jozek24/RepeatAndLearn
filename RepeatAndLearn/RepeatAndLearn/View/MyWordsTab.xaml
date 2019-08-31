@@ -26,12 +26,12 @@
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBox>
         </GroupBox>
 
         <StackPanel Grid.Row="1" Grid.Column="1" 
-                                Orientation="Vertical"
-                                Margin="15">
+                                Orientation="Vertical">
+            <Border BorderThickness="3"/>
             <Button Command="{Binding AddMyWordCommand}"
                                 IsEnabled="{Binding CanAddNewWord}"
                                 MinHeight="40" MinWidth="40"

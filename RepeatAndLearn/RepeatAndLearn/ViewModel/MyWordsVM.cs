@@ -76,7 +76,6 @@ namespace RepeatAndLearn.ViewModel
 
         private void DeleteMyOldWord()
         {
-            //do sprawdzenia
             string sqlWordDelete = "DELETE FROM Words WHERE(@PlWord,@EnWord);";
 
             using (var connection = new SqlConnection(

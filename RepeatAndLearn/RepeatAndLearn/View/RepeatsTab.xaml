@@ -31,9 +31,9 @@
             </GroupBox>
 
             <StackPanel Grid.Row="1" Grid.Column="1" 
-                                Orientation="Vertical"
-                                Margin="15">
-                <Button Command="{Binding CheckAnswerCommand}"
+                                Orientation="Vertical">
+            <Border BorderThickness="3"/>
+            <Button Command="{Binding CheckAnswerCommand}"
                                 IsEnabled="{Binding CanAddNewWord}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern question}"
