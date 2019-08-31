@@ -88,8 +88,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\DictionaryResponse.cs" />
+    <Compile Include="Model\GlobalSettings.cs" />
     <Compile Include="ViewModel\MyViewModel.cs" />
     <Compile Include="Model\Word.cs" />
+    <Compile Include="ViewModel\MyWordsVM.cs" />
+    <Compile Include="ViewModel\RepeatsVM.cs" />
+    <Compile Include="ViewModel\TranslateVM.cs" />
+    <Compile Include="View\MyWordsTab.xaml.cs">
+      <DependentUpon>MyWordsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepeatsTab.xaml.cs">
+      <DependentUpon>RepeatsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TranslateTab.xaml.cs">
+      <DependentUpon>TranslateTab.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -102,6 +115,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MyWordsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepeatsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TranslateTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -130,8 +155,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

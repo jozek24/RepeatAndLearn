@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="RepeatAndLearn.View.MyWordsTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RepeatAndLearn.View"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
+            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
+                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
+                              controls:TextBoxHelper.ClearTextButton="True">
+            </TextBox>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" 
+                                Orientation="Vertical"
+                                Margin="15">
+            <Button Command="{Binding AddMyWordCommand}"
+                                IsEnabled="{Binding CanAddNewWord}"
+                                MinHeight="40" MinWidth="40"
+                                Content="{iconPacks:Modern Add}"
+                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Border BorderThickness="3"></Border>
+            <Button Command="{Binding DeleteMyWordCommand}"
+                                IsEnabled="{Binding CanDeleteWord}"
+                                MinHeight="40" MinWidth="40"
+                                Content="{iconPacks:Modern Minus}"
+                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

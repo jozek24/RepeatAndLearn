@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RepeatAndLearn"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        mc:Ignorable="d"
+                      xmlns:view="clr-namespace:RepeatAndLearn.View"
+                      mc:Ignorable="d"
         Title="Repeat And Learn" Height="450" Width="500"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
@@ -17,200 +18,16 @@
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
-    <Grid>
-        <controls:MetroAnimatedTabControl >
-            <TabItem Header="Powtórki">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+    <controls:MetroAnimatedTabControl>
+        <TabItem Header="Powtórki">
+            <view:RepeatsTab/>
+        </TabItem>
+        <TabItem Header="Tłumaczenie">
+            <view:TranslateTab/>
+        </TabItem>
+        <TabItem Header="Dodaj słówka">
+            <view:MyWordsTab/>
+        </TabItem>
+    </controls:MetroAnimatedTabControl>
 
-                    <GroupBox Grid.Row="0" Grid.Column="0" Header="">
-
-                        <TextBlock  Grid.Row="0" Grid.Column="0" Text="{Binding WordToCheck}" 
-                              controls:TextBoxHelper.ClearTextButton="True">
-                        </TextBlock>
-                    </GroupBox>
-                    <GroupBox Grid.Row="1" Grid.Column="0" Header="Odpowiedź">
-                        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord, Mode=OneWayToSource}"></TextBox>
-                    </GroupBox>
-
-                    <StackPanel Grid.Row="1" Grid.Column="1" 
-                                Orientation="Vertical"
-                                Margin="15">
-                        <Button Command="{Binding CheckAnswerCommand}"
-                                IsEnabled="{Binding CanAddNewWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern question}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Border BorderThickness="3"></Border>
-                        <Button Command="{Binding DeleteTranslatedWordCommand}"
-                                IsEnabled="{Binding CanDeleteWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern Minus}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" 
-                                Command="{Binding MyAnswerWrongCommand}"
-                                Content="1"
-                                Background="Red"
-                                FontSize="15"
-                                Margin="2"
-                                />
-                        <Button Grid.Column="1" 
-                                Command="{Binding MyAnswerCorrectCommand}"
-                                Content="2"
-                                Background="Green"
-                                FontSize="15"
-                                Margin="2"/>
-                    </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Tłumaczenie" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.RowSpan="2" Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Button  Grid.Row="0"  
-                                MinHeight="40" MinWidth="40" 
-                                Command="{Binding ApiExecuteCommand}" 
-                                Content="{iconPacks:Modern magnify}" 
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                VerticalAlignment="Top" HorizontalAlignment="Center"/>
-                        <Button Grid.Row="1" 
-                                Command="{Binding LanguageDirectionCommand}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern ArrowUpDown}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Row="2" 
-                                Command="{Binding AddWordCommand}"
-                                IsEnabled="{Binding CanAddNewWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern Add}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Row="3" 
-                                Command="{Binding DeleteWordCommand}"
-                                IsEnabled="{Binding CanDeleteWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern Minus}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
-
-                    <GroupBox x:Name="GroupBox" Grid.Row="0" Grid.Column="0" >
-                        <GroupBox.Header>
-                            <TextBlock>
-                                <TextBlock.Style>
-                                    <Style>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding LanguageDirection}" Value="en-pl">
-                                                <Setter Property="TextBlock.Text" Value="Angielski"></Setter>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding LanguageDirection}" Value="pl-en">
-                                                <Setter Property="TextBlock.Text" Value="Polski"></Setter>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </GroupBox.Header>
-                        <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
-                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
-                              controls:TextBoxHelper.ClearTextButton="True">
-                        </TextBox>
-                    </GroupBox>
-
-                    <GroupBox x:Name="TextBlock" Grid.Row="1" Grid.Column="0" >
-                        <GroupBox.Header>
-                            <TextBlock>
-                                <TextBlock.Style>
-                                    <Style>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding LanguageDirection}" Value="en-pl">
-                                                <Setter Property="TextBlock.Text" Value="Polski"></Setter>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding LanguageDirection}" Value="pl-en">
-                                                <Setter Property="TextBlock.Text" Value="Angielski"></Setter>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </GroupBox.Header>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Dodaj słówka" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-                        <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
-                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
-                              controls:TextBoxHelper.ClearTextButton="True">
-                        </TextBox>
-                    </GroupBox>
-                    <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
-                    </GroupBox>
-
-                    <StackPanel Grid.Row="1" Grid.Column="1" 
-                                Orientation="Vertical"
-                                Margin="15">
-                        <Button Command="{Binding AddTranslatedWordCommand}"
-                                IsEnabled="{Binding CanAddNewWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern Add}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Border BorderThickness="3"></Border>
-                        <Button Command="{Binding DeleteTranslatedWordCommand}"
-                                IsEnabled="{Binding CanDeleteWord}"
-                                MinHeight="40" MinWidth="40"
-                                Content="{iconPacks:Modern Minus}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-        </controls:MetroAnimatedTabControl>
-
-    </Grid>
 </controls:MetroWindow>

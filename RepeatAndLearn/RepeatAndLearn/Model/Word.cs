@@ -2,7 +2,7 @@
 
 namespace RepeatAndLearn.Model
 {
-    class Word
+    public class Word
     {
         public int IdWord { get; set; }
         public string PlWord { get; set; }
