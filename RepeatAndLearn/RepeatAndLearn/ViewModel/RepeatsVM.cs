@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -117,6 +115,8 @@ namespace RepeatAndLearn.ViewModel
 
         private void MyAnswerCorrect()
         {
+            if (AnswerButtonsVisibility == false)
+                return;
             UpdateListOnCorrectAnswer();
             listOfRepeatsToDo.RemoveAt(_randomNumber);
             RandomWordToCheck();
@@ -126,6 +126,8 @@ namespace RepeatAndLearn.ViewModel
 
         private void MyAnswerWrong()
         {
+            if (AnswerButtonsVisibility == false)
+                return;
             UpdateListOnWrongAnswer();
             RandomWordToCheck();
             MyAnswer = "";
@@ -186,30 +188,26 @@ namespace RepeatAndLearn.ViewModel
         }
         private int DaysToNextRepeat(int totalRepeats, int currentRepeats)
         {
-
-            // int total = listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats; //im mniejsze tym szybciej
-            //int current = listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats; //im mniejsze tym później
-
-            if (totalRepeats <= 1) //if is new
+            if (totalRepeats <= 1)
             {
-                if (currentRepeats <= 2) // and easy
+                if (currentRepeats <= 2)
                     return 5;
 
-                return 2; // and difficult
+                return 2;
             }
-            else if (totalRepeats >= 2 && totalRepeats <= 5) //if is average
+            else if (totalRepeats >= 2 && totalRepeats <= 5)
             {
-                if (currentRepeats <= 2) // and easy
+                if (currentRepeats <= 2)
                     return 14;
-                return 10; // and difficult
+                return 10;
             }
-            else if (totalRepeats >= 6 && totalRepeats <= 9) //if is old
+            else if (totalRepeats >= 6 && totalRepeats <= 9)
             {
-                if (currentRepeats <= 2) // and easy
+                if (currentRepeats <= 2)
                     return 31;
-                return 18; //and difficult
+                return 18;
             }
-            else //when is old
+            else
             {
                 if (currentRepeats < 2)
                     return 100;

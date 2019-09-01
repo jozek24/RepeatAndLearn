@@ -24,14 +24,17 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-            <TextBox Grid.Row="0" Grid.Column="0" 
+            <TextBox Grid.Row="0" Grid.Column="0"
+                     FontSize="15"
                      Text="{Binding PlWordToAdd, UpdateSourceTrigger=PropertyChanged}"
                               controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Polsku" 
                               controls:TextBoxHelper.ClearTextButton="True">
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding EnWordToAdd, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Grid.Row="1" Grid.Column="0"
+                     FontSize="15"
+                     Text="{Binding EnWordToAdd, UpdateSourceTrigger=PropertyChanged}"
                      controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Angielsku" 
                      controls:TextBoxHelper.ClearTextButton="True"></TextBox>
         </GroupBox>
