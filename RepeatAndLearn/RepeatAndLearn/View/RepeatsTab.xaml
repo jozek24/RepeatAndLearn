@@ -20,10 +20,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox Grid.Row="0" Grid.Column="0" Header="">
-
-                <TextBlock  Grid.Row="0" Grid.Column="0" Text="{Binding WordToCheck}" 
-                              controls:TextBoxHelper.ClearTextButton="True">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="">
+            <TextBlock  Grid.Row="0" Grid.Column="0" Text="{Binding WordToCheck}" 
+                        controls:TextBoxHelper.ClearTextButton="True">
                 </TextBlock>
             </GroupBox>
             <GroupBox Grid.Row="1" Grid.Column="0" Header="Odpowiedź">

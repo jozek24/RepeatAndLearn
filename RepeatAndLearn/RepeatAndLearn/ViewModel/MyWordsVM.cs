@@ -13,18 +13,29 @@ namespace RepeatAndLearn.ViewModel
 {
     class MyWordsVM : BindableBase
     {
+
         private string _plWordToAdd;
         public string PlWordToAdd
         {
             get => _plWordToAdd;
-            set => SetProperty(ref _plWordToAdd, value);
+            set
+            {
+                CanAddNewWord = true;
+                CanDeleteWord = false;
+                SetProperty(ref _plWordToAdd, value);
+            }
         }
 
         private string _enWordToAdd;
         public string EnWordToAdd
         {
             get => _enWordToAdd;
-            set => SetProperty(ref _enWordToAdd, value);
+            set
+            {
+                CanAddNewWord = true;
+                CanDeleteWord = false;
+                SetProperty(ref _enWordToAdd, value);
+            }
         }
 
         private bool _canAddNewWord = true;
@@ -44,8 +55,8 @@ namespace RepeatAndLearn.ViewModel
 
         public MyWordsVM()
         {
-            AddMyWordCommand = new DelegateCommand(AddMyNewWord);
-            DeleteMyWordCommand = new DelegateCommand(DeleteMyOldWord);
+            AddMyWordCommand = new DelegateCommand(AddMyNewWord).ObservesProperty(() => PlWordToAdd);
+            DeleteMyWordCommand = new DelegateCommand(DeleteMyOldWord).ObservesProperty(() => PlWordToAdd);
         }
 
         public ICommand AddMyWordCommand { get; }

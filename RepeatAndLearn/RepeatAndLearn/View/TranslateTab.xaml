@@ -41,7 +41,7 @@
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Button Grid.Row="2" 
                                 Command="{Binding AddTranslatedWordCommand}"
-                                IsEnabled="{Binding CanAddNewWord}"
+                                IsEnabled="{Binding CanAddNewWord,UpdateSourceTrigger=PropertyChanged}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 

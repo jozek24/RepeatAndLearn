@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
 {
-    class RepeatsVM :BindableBase
+    class RepeatsVM : BindableBase
     {
         private List<Word> listOfRepeatsToDo;
         private Random random = new Random();
@@ -56,7 +56,7 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _myAnswer, value);
         }
 
-       
+
         public RepeatsVM()
         {
             GetListOfWordsToRepeatAndSetAmount();
@@ -111,7 +111,6 @@ namespace RepeatAndLearn.ViewModel
             UpdateListOnWrongAnswer();
             RandomWordToCheck();
         }
-
         private void UpdateListOnCorrectAnswer()
         {
             using (var connection = new SqlConnection(
@@ -122,7 +121,7 @@ namespace RepeatAndLearn.ViewModel
                 {
                     param.Add("@idOfWord ", listOfRepeatsToDo[_randomNumber].IdWord);
                     param.Add(
-                        "@dateOfNextRepeat ", 
+                        "@dateOfNextRepeat ",
                         listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
                               .AddDays(DaysToNextRepeat(
                                   listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
@@ -138,10 +137,9 @@ namespace RepeatAndLearn.ViewModel
                 }
             }
         }
-
         private void UpdateListOnWrongAnswer()
         {
-          
+
             using (var connection = new SqlConnection(
                 "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
@@ -149,10 +147,10 @@ namespace RepeatAndLearn.ViewModel
                 try
                 {
                     param.Add("@idOfWord", listOfRepeatsToDo[_randomNumber].IdWord);
-                    
+
                     param.Add(
-                        "@dateOfNextRepeat",DateTime.Now);
-                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].IdWord);
+                        "@dateOfNextRepeat", DateTime.Now);
+                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats++);
                     connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
                     connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
                 }
@@ -160,13 +158,8 @@ namespace RepeatAndLearn.ViewModel
                 {
                     MessageBox.Show(ex.Message);
                 }
-
-
-                              currenRepeatsAmount = listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats++,
-                     
             }
         }
-
         private int DaysToNextRepeat(int totalRepeats, int currentRepeats)
         {
 

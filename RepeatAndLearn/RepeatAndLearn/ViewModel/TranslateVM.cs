@@ -4,12 +4,9 @@ using Prism.Mvvm;
 using RepeatAndLearn.Model;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,14 +18,22 @@ namespace RepeatAndLearn.ViewModel
         public string WordToTranslate
         {
             get => _wordToTranslate;
-            set => SetProperty(ref _wordToTranslate, value);
+            set
+            {
+                CanAddNewWord = true;
+                CanDeleteWord = false;
+                SetProperty(ref _wordToTranslate, value);
+            }
         }
 
         private string _translatedWord;
         public string TranslatedWord
         {
             get => _translatedWord;
-            set => SetProperty(ref _translatedWord, value);
+            set
+            {
+                SetProperty(ref _translatedWord, value);
+            }
         }
 
         private string _languageDirection = "en-pl";

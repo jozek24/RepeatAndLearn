@@ -20,26 +20,29 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding PlWordToAdd, Mode=OneWayToSource}" 
-                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
+            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding PlWordToAdd, UpdateSourceTrigger=PropertyChanged}"
+                              controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Polsku" 
                               controls:TextBoxHelper.ClearTextButton="True">
+
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding EnWordToAdd, Mode=OneWayToSource}"></TextBox>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding EnWordToAdd, UpdateSourceTrigger=PropertyChanged}"
+                     controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Angielsku" 
+                     controls:TextBoxHelper.ClearTextButton="True"></TextBox>
         </GroupBox>
 
         <StackPanel Grid.Row="1" Grid.Column="1" 
                                 Orientation="Vertical">
             <Border BorderThickness="3"/>
-            <Button Command="{Binding AddMyWordCommand}"
+            <Button Command="{Binding AddMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
                                 IsEnabled="{Binding CanAddNewWord}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Border BorderThickness="3"></Border>
-            <Button Command="{Binding DeleteMyWordCommand}"
+            <Button Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
                                 IsEnabled="{Binding CanDeleteWord}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
