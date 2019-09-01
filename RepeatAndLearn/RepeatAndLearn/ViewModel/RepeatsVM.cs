@@ -20,6 +20,19 @@ namespace RepeatAndLearn.ViewModel
         private Random random = new Random();
         private int _randomNumber;
 
+        private string _colour = "White";
+        public string Colour
+        {
+            get => _colour;
+            set => SetProperty(ref _colour, value);
+        }
+
+        private bool _answerButtonsVisibility = false;
+        public bool AnswerButtonsVisibility
+        {
+            get => _answerButtonsVisibility;
+            set => SetProperty(ref _answerButtonsVisibility, value);
+        }
 
         private int _numberOfRepeats;
         public int NumberOfRepeats
@@ -49,7 +62,7 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _correctAnswer, value);
         }
 
-        private string _myAnswer;
+        private string _myAnswer="";
         public string MyAnswer
         {
             get => _myAnswer;
@@ -63,15 +76,15 @@ namespace RepeatAndLearn.ViewModel
             RandomWordToCheck();
 
             CheckAnswerCommand = new DelegateCommand(CheckAnswer);
-            RandomWordToCheckCommand = new DelegateCommand(RandomWordToCheck);
             MyAnswerWrongCommand = new DelegateCommand(MyAnswerWrong);
             MyAnswerCorrectCommand = new DelegateCommand(MyAnswerCorrect);
+            DeleteTranslatedWordCommand = new DelegateCommand(DeleteTranslatedOldWord);
 
         }
         public ICommand CheckAnswerCommand { get; }
-        public ICommand RandomWordToCheckCommand { get; }
         public ICommand MyAnswerWrongCommand { get; }
         public ICommand MyAnswerCorrectCommand { get; }
+        public ICommand DeleteTranslatedWordCommand { get; }
 
 
 
@@ -84,32 +97,39 @@ namespace RepeatAndLearn.ViewModel
         {
             IfMyAnswerCorrect = false;
             _randomNumber = random.Next(listOfRepeatsToDo.Count);
-            //    WordToCheck = listOfRepeatsToDo[_randomNumber].PlWord;
-            // CorrectAnswer = listOfRepeatsToDo[_randomNumber].EnWord;
+            WordToCheck = listOfRepeatsToDo[_randomNumber].PlWord;
+            CorrectAnswer = listOfRepeatsToDo[_randomNumber].EnWord;
         }
 
         private void CheckAnswer()
         {
+            AnswerButtonsVisibility = true;
             if (CorrectAnswer.ToLower().Trim() == MyAnswer.ToLower().Trim())
             {
+                Colour = "LightGreen";
                 IfMyAnswerCorrect = true;
                 return;
             }
             IfMyAnswerCorrect = false;
+            Colour = "IndianRed";
+            MyAnswer = CorrectAnswer;
         }
 
         private void MyAnswerCorrect()
         {
             UpdateListOnCorrectAnswer();
-            NumberOfRepeats--;  //powiadomić jeśli wszyskie wykonane
             listOfRepeatsToDo.RemoveAt(_randomNumber);
             RandomWordToCheck();
+            MyAnswer = "";
+            Colour = "White";
         }
 
         private void MyAnswerWrong()
         {
             UpdateListOnWrongAnswer();
             RandomWordToCheck();
+            MyAnswer = "";
+            Colour = "White";
         }
         private void UpdateListOnCorrectAnswer()
         {
@@ -119,16 +139,15 @@ namespace RepeatAndLearn.ViewModel
                 DynamicParameters param = new DynamicParameters();
                 try
                 {
-                    param.Add("@idOfWord ", listOfRepeatsToDo[_randomNumber].IdWord);
+                    param.Add("@idOfWord", listOfRepeatsToDo[_randomNumber].IdWord);
                     param.Add(
-                        "@dateOfNextRepeat ",
-                        listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
-                              .AddDays(DaysToNextRepeat(
-                                  listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
-                                  listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats)
-                                  ));
-                    param.Add("@totalAmountOfRepeats ", listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats++);
-
+                        "@dateOfNextRepeat",
+                    listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
+                          .AddDays(DaysToNextRepeat(
+                              listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
+                              listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats)
+                              ));
+                    param.Add("@totalAmountOfRepeats", listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats + 1);
                     connection.Execute("UpdateWordOnCorrect", param, commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
@@ -136,6 +155,9 @@ namespace RepeatAndLearn.ViewModel
                     MessageBox.Show(ex.Message);
                 }
             }
+            GlobalSettings.UpdateListOfWords();
+            GetListOfWordsToRepeatAndSetAmount();
+            AnswerButtonsVisibility = false;
         }
         private void UpdateListOnWrongAnswer()
         {
@@ -150,8 +172,7 @@ namespace RepeatAndLearn.ViewModel
 
                     param.Add(
                         "@dateOfNextRepeat", DateTime.Now);
-                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats++);
-                    connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
+                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats+1);
                     connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
                 }
                 catch (Exception ex)
@@ -159,6 +180,9 @@ namespace RepeatAndLearn.ViewModel
                     MessageBox.Show(ex.Message);
                 }
             }
+            GlobalSettings.UpdateListOfWords();
+            GetListOfWordsToRepeatAndSetAmount();
+            AnswerButtonsVisibility = false;
         }
         private int DaysToNextRepeat(int totalRepeats, int currentRepeats)
         {
@@ -191,6 +215,33 @@ namespace RepeatAndLearn.ViewModel
                     return 100;
                 return 365;
             }
+        }
+        private void DeleteTranslatedOldWord()
+        {
+
+            using (var connection = new SqlConnection(
+                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+            {
+                DynamicParameters param = new DynamicParameters();
+                try
+                {
+                    param.Add("@plWord", WordToCheck);
+                    param.Add("@enWord", CorrectAnswer);
+
+                    connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+            }
+            GlobalSettings.UpdateListOfWords();
+            GetListOfWordsToRepeatAndSetAmount();
+            AnswerButtonsVisibility = false;
+            RandomWordToCheck();
+            MyAnswer = "";
+            Colour = "White";
         }
     }
 }

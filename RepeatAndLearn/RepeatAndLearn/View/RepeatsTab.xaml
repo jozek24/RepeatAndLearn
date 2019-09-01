@@ -29,23 +29,25 @@
                         controls:TextBoxHelper.ClearTextButton="True">
             </TextBlock>
         </GroupBox>
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="Odpowiedź">
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord, Mode=OneWayToSource}"></TextBox>
+        <GroupBox x:Name="AnswerTextBox" Grid.Row="1" Grid.Column="0" 
+                  Header="{Binding NumberOfRepeats}">
+            <TextBox Grid.Row="1" Grid.Column="0" 
+                     Text="{Binding MyAnswer, Mode=TwoWay}"
+                     Background="{Binding Colour}"/>
         </GroupBox>
 
         <StackPanel Grid.Row="1" Grid.Column="1" 
                                 Orientation="Vertical">
             <Border BorderThickness="3"/>
             <Button Command="{Binding CheckAnswerCommand}"
-                                IsEnabled="{Binding CanAddNewWord}"
                                 MinHeight="40" MinWidth="40"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern question}"
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border BorderThickness="3"></Border>
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+               
+            </Button>
             <Button Command="{Binding DeleteTranslatedWordCommand}"
-                                IsEnabled="{Binding CanDeleteWord}"
-                        Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding AnswerButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="Red"
                                 MinHeight="40" MinWidth="40"
                                 BorderBrush="Black"
@@ -59,6 +61,7 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" 
                                 Command="{Binding MyAnswerWrongCommand}"
+                    Visibility="{Binding AnswerButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Content="1"
                                 Background="Red"
                                 FontSize="15"
@@ -66,6 +69,7 @@
                                 />
             <Button Grid.Column="1" 
                                 Command="{Binding MyAnswerCorrectCommand}"
+                    Visibility="{Binding AnswerButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Content="2"
                                 Background="ForestGreen"
                                 FontSize="15"
