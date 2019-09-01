@@ -18,16 +18,22 @@
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
-    <controls:MetroAnimatedTabControl>
-        <TabItem Header="Powtórki">
-            <view:RepeatsTab/>
-        </TabItem>
-        <TabItem Header="Tłumaczenie">
-            <view:TranslateTab/>
-        </TabItem>
-        <TabItem Header="Dodaj słówka">
-            <view:MyWordsTab/>
-        </TabItem>
-    </controls:MetroAnimatedTabControl>
 
+    <Grid>
+        <UniformGrid Columns="3" Margin="5,0">
+            <FrameworkElement x:Name="c1"/>
+            <!-- no need to add the other three -->
+        </UniformGrid>
+        <controls:MetroAnimatedTabControl>
+            <TabItem Header="Powtórki" Width="{Binding ElementName=c1, Path=ActualWidth}">
+                <view:RepeatsTab/>
+            </TabItem>
+            <TabItem Header="Tłumaczenie" Width="{Binding ElementName=c1, Path=ActualWidth}">
+                <view:TranslateTab/>
+            </TabItem>
+            <TabItem Header="Dodaj słówka" Width="{Binding ElementName=c1, Path=ActualWidth}">
+                <view:MyWordsTab/>
+            </TabItem>
+        </controls:MetroAnimatedTabControl>
+    </Grid>
 </controls:MetroWindow>

@@ -8,11 +8,11 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -27,7 +27,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Button  Grid.Row="0"  
@@ -36,28 +35,29 @@
                                 Command="{Binding ApiExecuteCommand}" 
                                 Content="{iconPacks:Modern magnify}" 
                                 VerticalAlignment="Top" HorizontalAlignment="Center"/>
-            <Button Grid.Row="1" 
+            <Button Grid.RowSpan="2" 
                                 Command="{Binding LanguageDirectionCommand}"
                                 BorderBrush="Black"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern ArrowUpDown}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button Grid.Row="2" 
+            <Button Grid.Row="1" 
                                 Command="{Binding AddTranslatedWordCommand}"
                                 Background="ForestGreen"
                                 BorderBrush="Black"
                                 Visibility="{Binding CanAddNewWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
-                                HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Button Grid.Row="2" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Grid.Row="1" 
                                 Command="{Binding DeleteTranslatedWordCommand}"
                                 Background="Red"
                                 BorderBrush="Black"
                                 Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
-                                HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         </Grid>
 
         <GroupBox x:Name="GroupBox" Grid.Row="0" Grid.Column="0" >

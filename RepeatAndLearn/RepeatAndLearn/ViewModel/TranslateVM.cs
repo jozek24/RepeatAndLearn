@@ -124,6 +124,8 @@ namespace RepeatAndLearn.ViewModel
         }
         private void ChangeLanguageDirection()
         {
+            CanAddNewWord = false;
+            CanDeleteWord = false;
             LanguageDirection = (LanguageDirection == "en-pl") ? "pl-en" : "en-pl";
         }
 
