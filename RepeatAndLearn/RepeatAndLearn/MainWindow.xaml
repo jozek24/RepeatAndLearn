@@ -8,7 +8,7 @@
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                       xmlns:view="clr-namespace:RepeatAndLearn.View"
                       mc:Ignorable="d"
-        Title="Repeat And Learn" Height="450" Width="500"
+        Title="Repeat And Learn" Height="450" Width="600"
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
 

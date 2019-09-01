@@ -20,9 +20,16 @@ namespace RepeatAndLearn.ViewModel
             get => _wordToTranslate;
             set
             {
-                CanAddNewWord = true;
+                TranslatedWord = "";
+                CanAddNewWord = false;
                 CanDeleteWord = false;
+
                 SetProperty(ref _wordToTranslate, value);
+                if (_wordToTranslate == "")
+                {
+                    CanAddNewWord = false;
+                    CanDeleteWord = false;
+                }
             }
         }
 
@@ -32,6 +39,7 @@ namespace RepeatAndLearn.ViewModel
             get => _translatedWord;
             set
             {
+                CanAddNewWord = true;
                 SetProperty(ref _translatedWord, value);
             }
         }
@@ -162,7 +170,7 @@ namespace RepeatAndLearn.ViewModel
 
         private void DeleteTranslatedOldWord()
         {
-           
+
             using (var connection = new SqlConnection(
                 "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {

@@ -14,7 +14,7 @@ namespace RepeatAndLearn.ViewModel
     class MyWordsVM : BindableBase
     {
 
-        private string _plWordToAdd;
+        private string _plWordToAdd="";
         public string PlWordToAdd
         {
             get => _plWordToAdd;
@@ -23,10 +23,15 @@ namespace RepeatAndLearn.ViewModel
                 CanAddNewWord = true;
                 CanDeleteWord = false;
                 SetProperty(ref _plWordToAdd, value);
+                if (_plWordToAdd == "" || _enWordToAdd == "")
+                {
+                    CanAddNewWord = false;
+                    CanDeleteWord = false;
+                }
             }
         }
 
-        private string _enWordToAdd;
+        private string _enWordToAdd="";
         public string EnWordToAdd
         {
             get => _enWordToAdd;
@@ -35,10 +40,15 @@ namespace RepeatAndLearn.ViewModel
                 CanAddNewWord = true;
                 CanDeleteWord = false;
                 SetProperty(ref _enWordToAdd, value);
+                if (_plWordToAdd == "" || _enWordToAdd == "")
+                {
+                    CanAddNewWord = false;
+                    CanDeleteWord = false;
+                }
             }
         }
 
-        private bool _canAddNewWord = true;
+        private bool _canAddNewWord = false;
         public bool CanAddNewWord
         {
             get => _canAddNewWord;

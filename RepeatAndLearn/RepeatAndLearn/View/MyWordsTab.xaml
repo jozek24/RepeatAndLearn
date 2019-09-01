@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -24,10 +24,10 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding PlWordToAdd, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Grid.Row="0" Grid.Column="0" 
+                     Text="{Binding PlWordToAdd, UpdateSourceTrigger=PropertyChanged}"
                               controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Polsku" 
                               controls:TextBoxHelper.ClearTextButton="True">
-
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
@@ -40,22 +40,26 @@
                                 Orientation="Vertical">
             <Border BorderThickness="3"/>
             <Button Command="{Binding AddMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
+                    Visibility="{Binding CanAddNewWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="ForestGreen"
                                 BorderBrush="Black"
-                                Visibility="{Binding CanAddNewWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+
             <Border BorderThickness="3"></Border>
             <Button Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
+                    Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="Red"
                                 BorderBrush="Black"
-                                Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+
+
         </StackPanel>
     </Grid>
 </UserControl>

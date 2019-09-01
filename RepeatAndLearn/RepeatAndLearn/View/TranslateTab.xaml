@@ -28,7 +28,6 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Button  Grid.Row="0"  
@@ -53,8 +52,8 @@
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button Grid.Row="3" 
+                                HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <Button Grid.Row="2" 
                                 Command="{Binding DeleteTranslatedWordCommand}"
                                 Background="Red"
                                 BorderBrush="Black"
@@ -62,7 +61,7 @@
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                HorizontalAlignment="Center" VerticalAlignment="Top"/>
         </Grid>
 
         <GroupBox x:Name="GroupBox" Grid.Row="0" Grid.Column="0" >
@@ -82,7 +81,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox.Header>
-            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource}" 
+            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" 
                               controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
                               controls:TextBoxHelper.ClearTextButton="True">
             </TextBox>
