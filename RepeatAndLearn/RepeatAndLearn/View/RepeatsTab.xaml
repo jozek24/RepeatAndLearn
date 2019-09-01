@@ -12,28 +12,28 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="5*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="">
             <TextBlock  Grid.Row="0" Grid.Column="0" Text="{Binding WordToCheck}" 
                         controls:TextBoxHelper.ClearTextButton="True">
-                </TextBlock>
-            </GroupBox>
-            <GroupBox Grid.Row="1" Grid.Column="0" Header="Odpowiedź">
-                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord, Mode=OneWayToSource}"></TextBox>
-            </GroupBox>
+            </TextBlock>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Odpowiedź">
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord, Mode=OneWayToSource}"></TextBox>
+        </GroupBox>
 
-            <StackPanel Grid.Row="1" Grid.Column="1" 
+        <StackPanel Grid.Row="1" Grid.Column="1" 
                                 Orientation="Vertical">
             <Border BorderThickness="3"/>
             <Button Command="{Binding CheckAnswerCommand}"
@@ -41,37 +41,35 @@
                                 MinHeight="40" MinWidth="40"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern question}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Border BorderThickness="3"></Border>
-                <Button Command="{Binding DeleteTranslatedWordCommand}"
+            <Border BorderThickness="3"></Border>
+            <Button Command="{Binding DeleteTranslatedWordCommand}"
                                 IsEnabled="{Binding CanDeleteWord}"
                         Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="Red"
                                 MinHeight="40" MinWidth="40"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern Minus}"
-                                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
-            <Grid Grid.Row="2" Grid.ColumnSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" 
+        </StackPanel>
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" 
                                 Command="{Binding MyAnswerWrongCommand}"
                                 Content="1"
                                 Background="Red"
                                 FontSize="15"
                                 Margin="2"
                                 />
-                <Button Grid.Column="1" 
+            <Button Grid.Column="1" 
                                 Command="{Binding MyAnswerCorrectCommand}"
                                 Content="2"
                                 Background="ForestGreen"
                                 FontSize="15"
                                 Margin="2"/>
-            </Grid>
         </Grid>
+    </Grid>
 </UserControl>
