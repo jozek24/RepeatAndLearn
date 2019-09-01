@@ -9,6 +9,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -36,14 +40,18 @@
                                 Orientation="Vertical">
             <Border BorderThickness="3"/>
             <Button Command="{Binding AddMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="{Binding CanAddNewWord}"
+                                Background="ForestGreen"
+                                BorderBrush="Black"
+                                Visibility="{Binding CanAddNewWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Border BorderThickness="3"></Border>
             <Button Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="{Binding CanDeleteWord}"
+                                Background="Red"
+                                BorderBrush="Black"
+                                Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
                                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
