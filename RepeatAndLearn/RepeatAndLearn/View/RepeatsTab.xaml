@@ -15,9 +15,9 @@
     </UserControl.Resources>
 
     <UserControl.InputBindings>
-        <KeyBinding Command="{Binding MyAnswerWrongCommand}" Key="D1" ></KeyBinding>
-        <KeyBinding Command="{Binding MyAnswerCorrectCommand}" Key="D2" ></KeyBinding>
-        <KeyBinding Command="{Binding CheckAnswerCommand}" Key="Enter" ></KeyBinding>
+        <KeyBinding Command="{Binding MyAnswerWrongCommand}" Key="D1" />
+        <KeyBinding Command="{Binding MyAnswerCorrectCommand}" Key="D2" />
+        <KeyBinding Command="{Binding CheckAnswerCommand}" Key="Enter" />
     </UserControl.InputBindings>
 
     <Grid>
@@ -44,7 +44,9 @@
             <TextBox Grid.Row="1" Grid.Column="0" 
                      Text="{Binding MyAnswer, Mode=TwoWay}"
                      FontSize="15"
-                     Background="{Binding Colour}"/>
+                     Background="{Binding Colour}"
+                     controls:TextBoxHelper.Watermark="Wpisz tłumaczenie"
+                     controls:TextBoxHelper.ClearTextButton="True"/>
         </GroupBox>
 
         <Button Grid.Row="1" Grid.Column="1"  

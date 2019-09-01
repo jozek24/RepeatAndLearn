@@ -126,7 +126,7 @@ namespace RepeatAndLearn.ViewModel
         }
         private bool CheckIfCanAddMyNewWord()
         {
-
+            if (PlWordToAdd == "" || EnWordToAdd == "") return false;
             if (
               GlobalSettings.actualListOfWords.Any(x => x.EnWord == EnWordToAdd.ToLower().Trim()
                 && x.PlWord == PlWordToAdd.ToLower().Trim()))

@@ -13,6 +13,10 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding AddMyWordCommand,UpdateSourceTrigger=PropertyChanged}" Key="Enter" />
+    </UserControl.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -39,24 +43,22 @@
                      controls:TextBoxHelper.ClearTextButton="True"></TextBox>
         </GroupBox>
 
-        <StackPanel Grid.Row="1" Grid.Column="1" 
-                                Orientation="Vertical">
-            <Border BorderThickness="3"/>
-            <Button Command="{Binding AddMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
+        <Button Grid.Row="1" Grid.Column="1"  
+                Command="{Binding AddMyWordCommand}"
                     Visibility="{Binding CanAddNewWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="ForestGreen"
                                 BorderBrush="Black"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Border BorderThickness="3"></Border>
-            <Button Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
+        <Border BorderThickness="3"></Border>
+        <Button Grid.Row="1" Grid.Column="1"  
+            Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
                     Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="Red"
                                 BorderBrush="Black"
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Minus}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </StackPanel>
     </Grid>
 </UserControl>

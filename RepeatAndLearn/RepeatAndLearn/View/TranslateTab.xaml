@@ -13,6 +13,10 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding ApiExecuteCommand}" Key="Enter" />
+    </UserControl.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -80,7 +84,7 @@
             <TextBox  Grid.Row="0" Grid.Column="0"
                       FontSize="15"
                       Text="{Binding WordToTranslate, UpdateSourceTrigger=PropertyChanged}" 
-                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
+                              controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia" 
                               controls:TextBoxHelper.ClearTextButton="True">
             </TextBox>
         </GroupBox>
