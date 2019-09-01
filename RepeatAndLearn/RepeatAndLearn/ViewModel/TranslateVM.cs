@@ -14,7 +14,7 @@ namespace RepeatAndLearn.ViewModel
 {
     class TranslateVM : BindableBase
     {
-        private string _wordToTranslate;
+        private string _wordToTranslate ="";
         public string WordToTranslate
         {
             get => _wordToTranslate;
@@ -33,7 +33,7 @@ namespace RepeatAndLearn.ViewModel
             }
         }
 
-        private string _translatedWord;
+        private string _translatedWord="";
         public string TranslatedWord
         {
             get => _translatedWord;
@@ -95,6 +95,10 @@ namespace RepeatAndLearn.ViewModel
         }
         private void CheckIfCanAddTranslatedNewWord()
         {
+            if (WordToTranslate == "")
+            {
+                return;
+            }
             if (LanguageDirection == "en-pl")
             {
                 if (

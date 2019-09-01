@@ -12,17 +12,9 @@
         ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen">
 
-    <controls:MetroWindow.RightWindowCommands>
-        <controls:WindowCommands>
-            <Button Content="settings"/>
-        </controls:WindowCommands>
-    </controls:MetroWindow.RightWindowCommands>
-
-
     <Grid>
         <UniformGrid Columns="3" Margin="5,0">
             <FrameworkElement x:Name="c1"/>
-            <!-- no need to add the other three -->
         </UniformGrid>
         <controls:MetroAnimatedTabControl>
             <TabItem Header="Powtórki" Width="{Binding ElementName=c1, Path=ActualWidth}">

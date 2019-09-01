@@ -77,7 +77,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox.Header>
-            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" 
+            <TextBox  Grid.Row="0" Grid.Column="0" Text="{Binding WordToTranslate, UpdateSourceTrigger=PropertyChanged}" 
                               controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia.." 
                               controls:TextBoxHelper.ClearTextButton="True">
             </TextBox>
@@ -100,7 +100,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox.Header>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord}"></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding TranslatedWord,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </GroupBox>
     </Grid>
 </UserControl>
