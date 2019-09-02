@@ -36,7 +36,7 @@
                 <controls:MetroProgressBar MinHeight="10" 
                                            Minimum="0" 
                                            Maximum="{Binding MaxNumberOfRepeats}"  
-                                           Value="{Binding NumberOfRepeatsToDo}" 
+                                           Value="{Binding NumberOfRepeatsToDoToday}" 
                                            Background="Orange"/>
                 <TextBlock 
                        Margin="3"
@@ -48,23 +48,21 @@
         <GroupBox Grid.Row="1" Grid.Column="0"
                   Header="{Binding NumberOfRepeats}" 
                   HeaderStringFormat="Powtórki do wykonania - {0}">
-            <TextBox 
-                     Text="{Binding MyAnswer, Mode=TwoWay}"
+            <TextBox
+                     Text="{Binding MyAnswer, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      FontSize="15"
                      Background="{Binding Colour}"
                      controls:TextBoxHelper.Watermark="Wpisz tłumaczenie"
-                     controls:TextBoxHelper.ClearTextButton="True"/>
+                     controls:TextBoxHelper.ClearTextButton="True">
+            </TextBox>
         </GroupBox>
-
 
         <Button Grid.Row="1" Grid.Column="1"  
                 Command="{Binding CheckAnswerCommand}"
                                 MinHeight="40" MinWidth="40"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern question}"
-                                HorizontalAlignment="Center" VerticalAlignment="Center">
-
-        </Button>
+                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button  Grid.Row="1" Grid.Column="1"  
                  Command="{Binding DeleteTranslatedWordCommand}"
                  Visibility="{Binding AnswerButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -73,7 +71,6 @@
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern Minus}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
         <Grid Grid.Row="2" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

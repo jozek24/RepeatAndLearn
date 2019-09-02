@@ -9,7 +9,7 @@ namespace RepeatAndLearn.ViewModel
 {
     class TranslateVM : BindableBase
     {
-        private StoredProcedure _storedProcedure = new StoredProcedure();
+        private readonly StoredProcedure _storedProcedure = new StoredProcedure();
 
         private string _wordToTranslate = "";
         public string WordToTranslate
@@ -20,7 +20,6 @@ namespace RepeatAndLearn.ViewModel
                 TranslatedWord = "";
                 CanAddNewWord = false;
                 CanDeleteWord = false;
-
                 SetProperty(ref _wordToTranslate, value);
             }
         }
@@ -29,11 +28,7 @@ namespace RepeatAndLearn.ViewModel
         public string TranslatedWord
         {
             get => _translatedWord;
-            set
-            {
-                CanAddNewWord = true;
-                SetProperty(ref _translatedWord, value);
-            }
+            set => SetProperty(ref _translatedWord, value);
         }
 
         private string _languageDirection = "en-pl";
@@ -114,18 +109,20 @@ namespace RepeatAndLearn.ViewModel
             CanAddNewWord = true;
             CanDeleteWord = false;
         }
+
         private bool CheckIfTheWordAlreadyExist(string enWord, string plWord)
         {
-            if (GlobalSettings.actualListOfWords.Any(x => x.EnWord == enWord.ToLower().Trim()
+            if (GlobalSettings.ActualListOfWords.Any(x => x.EnWord == enWord.ToLower().Trim()
                    && x.PlWord == plWord.ToLower().Trim()))
             {
                 return true;
             }
             return false;
         }
+
         private void ChangeLanguageDirection()
         {
-            if(TranslatedWord!="")
+            if (TranslatedWord != "")
                 WordToTranslate = TranslatedWord;
 
             LanguageDirection = (LanguageDirection == "en-pl") ? "pl-en" : "en-pl";
@@ -145,7 +142,6 @@ namespace RepeatAndLearn.ViewModel
             CanDeleteWord = true;
         }
 
-
         private void DeleteTranslatedOldWord()
         {
 
@@ -160,7 +156,5 @@ namespace RepeatAndLearn.ViewModel
             CanAddNewWord = true;
             CanDeleteWord = false;
         }
-
-
     }
 }

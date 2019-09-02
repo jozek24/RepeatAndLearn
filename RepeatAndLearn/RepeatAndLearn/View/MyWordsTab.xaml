@@ -28,7 +28,7 @@
         </Grid.ColumnDefinitions>
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Słówko po Polsku">
-            <TextBox Grid.Row="0" Grid.Column="0"
+            <TextBox
                      FontSize="15"
                      Text="{Binding PlWordToAdd, UpdateSourceTrigger=PropertyChanged}"
                               controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Polsku" 
@@ -36,7 +36,7 @@
             </TextBox>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Słówko po Angielsku">
-            <TextBox Grid.Row="1" Grid.Column="0"
+            <TextBox
                      FontSize="15"
                      Text="{Binding EnWordToAdd, UpdateSourceTrigger=PropertyChanged}"
                      controls:TextBoxHelper.Watermark="Wpisz swoje słówko po Angielsku" 
@@ -51,7 +51,6 @@
                                 MinHeight="40" MinWidth="40"
                                 Content="{iconPacks:Modern Add}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Border BorderThickness="3"></Border>
         <Button Grid.Row="1" Grid.Column="1"  
             Command="{Binding DeleteMyWordCommand,UpdateSourceTrigger=PropertyChanged}"
                     Visibility="{Binding CanDeleteWord, Converter={StaticResource BooleanToVisibilityConverter}}"

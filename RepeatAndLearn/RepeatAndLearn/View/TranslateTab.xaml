@@ -16,7 +16,7 @@
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding ApiExecuteCommand}" Key="Enter" />
     </UserControl.InputBindings>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -81,7 +81,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox.Header>
-            <TextBox  Grid.Row="0" Grid.Column="0"
+            <TextBox  
                       FontSize="15"
                       Text="{Binding WordToTranslate, UpdateSourceTrigger=PropertyChanged}" 
                               controls:TextBoxHelper.Watermark="Wpisz tekst do przetłumaczenia" 
@@ -106,7 +106,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox.Header>
-            <TextBlock Grid.Row="1" Grid.Column="0"
+            <TextBlock
                        FontSize="15"
                        Text="{Binding TranslatedWord,UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </GroupBox>

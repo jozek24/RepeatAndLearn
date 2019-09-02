@@ -11,11 +11,11 @@ namespace RepeatAndLearn.ViewModel
 {
     class RepeatsVM : BindableBase
     {
-        private RepeatsM _repeatsM = new RepeatsM();
-        private StoredProcedure _storedProcedure = new StoredProcedure();
-        private List<Word> listOfRepeatsToDo;
-        private Random random = new Random();
+        private readonly RepeatsM _repeatsM = new RepeatsM();
+        private readonly StoredProcedure _storedProcedure = new StoredProcedure();
+        private readonly Random _random = new Random();
         private int _randomNumber;
+        private List<Word> _listOfRepeatsToDo;
 
         private int _maxNumberOfRepeats;
         public int MaxNumberOfRepeats
@@ -24,11 +24,11 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _maxNumberOfRepeats, value);
         }
 
-        private int _numberOfRepeatsToDo;
-        public int NumberOfRepeatsToDo
+        private int _numberOfRepeatsToDoToday;
+        public int NumberOfRepeatsToDoToday
         {
-            get => _numberOfRepeatsToDo;
-            set => SetProperty(ref _numberOfRepeatsToDo, value);
+            get => _numberOfRepeatsToDoToday;
+            set => SetProperty(ref _numberOfRepeatsToDoToday, value);
         }
 
         private int _numberOfRepeats;
@@ -59,13 +59,6 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _wordToCheck, value);
         }
 
-        private bool _ifMyAnswerCorrect = false;
-        public bool IfMyAnswerCorrect
-        {
-            get => _ifMyAnswerCorrect;
-            set => SetProperty(ref _ifMyAnswerCorrect, value);
-        }
-
         private string _correctAnswer;
         public string CorrectAnswer
         {
@@ -73,29 +66,23 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _correctAnswer, value);
         }
 
-        private string _myAnswer="";
+        private string _myAnswer = "";
         public string MyAnswer
         {
             get => _myAnswer;
             set => SetProperty(ref _myAnswer, value);
         }
 
-
         public RepeatsVM()
         {
             GetListOfWordsToRepeatAndSetAmount();
-            RandomWordToCheck();
-
-            MaxNumberOfRepeats = NumberOfRepeats;
-            NumberOfRepeatsToDo = MaxNumberOfRepeats - NumberOfRepeats;
-
             GlobalSettings.WordsChange += GlobalSettings_WordsChange;
+            RandomWordToCheck();
 
             CheckAnswerCommand = new DelegateCommand(CheckAnswer);
             MyAnswerWrongCommand = new DelegateCommand(MyAnswerWrong);
             MyAnswerCorrectCommand = new DelegateCommand(MyAnswerCorrect);
             DeleteTranslatedWordCommand = new DelegateCommand(DeleteTranslatedOldWord);
-
         }
 
         private void GlobalSettings_WordsChange(object sender, EventArgs e)
@@ -108,37 +95,48 @@ namespace RepeatAndLearn.ViewModel
         public ICommand MyAnswerCorrectCommand { get; }
         public ICommand DeleteTranslatedWordCommand { get; }
 
-
-
         private void GetListOfWordsToRepeatAndSetAmount()
         {
-            listOfRepeatsToDo = GlobalSettings.actualListOfWords.Where(x => x.DateOfNextRepeat.Date < DateTime.Now).ToList();
-            NumberOfRepeats = listOfRepeatsToDo.Count;
-            if (listOfRepeatsToDo.Count > MaxNumberOfRepeats)
-                MaxNumberOfRepeats = listOfRepeatsToDo.Count;
+            _listOfRepeatsToDo = GlobalSettings.ActualListOfWords.Where(x => x.DateOfNextRepeat.Date < DateTime.Now).ToList();
+
+            NumberOfRepeats = _listOfRepeatsToDo.Count;
+            if (_listOfRepeatsToDo.Count > MaxNumberOfRepeats)
+                MaxNumberOfRepeats = _listOfRepeatsToDo.Count;
+            NumberOfRepeatsToDoToday = MaxNumberOfRepeats - NumberOfRepeats;
         }
+
         private void RandomWordToCheck()
         {
-            IfMyAnswerCorrect = false;
-            _randomNumber = random.Next(listOfRepeatsToDo.Count);
-            WordToCheck = listOfRepeatsToDo[_randomNumber].PlWord;
-            CorrectAnswer = listOfRepeatsToDo[_randomNumber].EnWord;
+            _randomNumber = _random.Next(_listOfRepeatsToDo.Count);
+            WordToCheck = _listOfRepeatsToDo[_randomNumber].PlWord;
+            CorrectAnswer = _listOfRepeatsToDo[_randomNumber].EnWord;
         }
 
         private void CheckAnswer()
         {
+            if (AnswerButtonsVisibility == true)
+            {
+                if (CorrectAnswer.ToLower().Trim() == MyAnswer.ToLower().Trim())
+                {
+                    MyAnswerCorrect();
+                    return;
+                }
+                UpdateListOnWrongAnswer();
+                RandomWordToCheck();
+                MyAnswer = "";
+                Colour = "White";
+                return;
+            }
+
             AnswerButtonsVisibility = true;
-            
             if (CorrectAnswer.ToLower().Trim() == MyAnswer.ToLower().Trim())
             {
                 Colour = "LightGreen";
-                IfMyAnswerCorrect = true;
                 return;
             }
-            IfMyAnswerCorrect = false;
             Colour = "IndianRed";
-           // string newAnswer = "Twoja odpowiedź: " + MyAnswer + "\n" + "Poprawna odpowiedź: " + CorrectAnswer;
-            MyAnswer = CorrectAnswer;
+            string newAnswer = "Twoja odpowiedź: " + MyAnswer + "\n" + "Poprawna odpowiedź: " + CorrectAnswer;
+            MyAnswer = newAnswer;
         }
 
         private void MyAnswerCorrect()
@@ -146,11 +144,9 @@ namespace RepeatAndLearn.ViewModel
             if (AnswerButtonsVisibility == false)
                 return;
             UpdateListOnCorrectAnswer();
-
             RandomWordToCheck();
             MyAnswer = "";
             Colour = "White";
-            NumberOfRepeatsToDo = MaxNumberOfRepeats - NumberOfRepeats;
         }
 
         private void MyAnswerWrong()
@@ -164,19 +160,17 @@ namespace RepeatAndLearn.ViewModel
         }
         private void UpdateListOnCorrectAnswer()
         {
-            _storedProcedure.UpdateWordOnCorrect(listOfRepeatsToDo, _randomNumber, _repeatsM);
+            _storedProcedure.UpdateWordOnCorrect(_listOfRepeatsToDo, _randomNumber, _repeatsM);
             AnswerButtonsVisibility = false;
         }
         private void UpdateListOnWrongAnswer()
         {
-
-            _storedProcedure.UpdateWordOnWrong(listOfRepeatsToDo, _randomNumber);
+            _storedProcedure.UpdateWordOnWrong(_listOfRepeatsToDo, _randomNumber);
             AnswerButtonsVisibility = false;
         }
-        
+
         private void DeleteTranslatedOldWord()
         {
-
             _storedProcedure.DeleteOldWord(WordToCheck, CorrectAnswer);
             AnswerButtonsVisibility = false;
             RandomWordToCheck();

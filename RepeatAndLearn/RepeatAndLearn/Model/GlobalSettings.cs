@@ -12,17 +12,17 @@ namespace RepeatAndLearn.Model
         public const string ConnectionString = "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;";
         public const string TranslateHttps = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=";
 
-        public static List<Word> actualListOfWords;
+        public static List<Word> ActualListOfWords;
 
         public static event EventHandler WordsChange;
         private static void WordsChanged()
             => WordsChange?.Invoke(null, new EventArgs());
 
-
         static GlobalSettings()
         {
             UpdateListOfWords();
         }
+
         public static void UpdateListOfWords()
         {
             string sqlWordsSelect = "SELECT * FROM Words;";
@@ -30,7 +30,7 @@ namespace RepeatAndLearn.Model
             using (var connection = new SqlConnection(
                 "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
             {
-                actualListOfWords = connection.Query<Word>(sqlWordsSelect).ToList();
+                ActualListOfWords = connection.Query<Word>(sqlWordsSelect).ToList();
             }
             WordsChanged();
         }
