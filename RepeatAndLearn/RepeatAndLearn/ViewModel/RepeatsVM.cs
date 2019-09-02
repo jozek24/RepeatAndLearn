@@ -31,6 +31,13 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _numberOfRepeatsToDo, value);
         }
 
+        private int _numberOfRepeats;
+        public int NumberOfRepeats
+        {
+            get => _numberOfRepeats;
+            set => SetProperty(ref _numberOfRepeats, value);
+        }
+
         private string _colour = "White";
         public string Colour
         {
@@ -43,13 +50,6 @@ namespace RepeatAndLearn.ViewModel
         {
             get => _answerButtonsVisibility;
             set => SetProperty(ref _answerButtonsVisibility, value);
-        }
-
-        private int _numberOfRepeats;
-        public int NumberOfRepeats
-        {
-            get => _numberOfRepeats;
-            set => SetProperty(ref _numberOfRepeats, value);
         }
 
         private string _wordToCheck;
@@ -118,6 +118,7 @@ namespace RepeatAndLearn.ViewModel
         private void CheckAnswer()
         {
             AnswerButtonsVisibility = true;
+            
             if (CorrectAnswer.ToLower().Trim() == MyAnswer.ToLower().Trim())
             {
                 Colour = "LightGreen";
@@ -126,6 +127,7 @@ namespace RepeatAndLearn.ViewModel
             }
             IfMyAnswerCorrect = false;
             Colour = "IndianRed";
+           // string newAnswer = "Twoja odpowiedź: " + MyAnswer + "\n" + "Poprawna odpowiedź: " + CorrectAnswer;
             MyAnswer = CorrectAnswer;
         }
 
@@ -154,7 +156,6 @@ namespace RepeatAndLearn.ViewModel
         {
             _storedProcedure.UpdateWordOnCorrect(listOfRepeatsToDo, _randomNumber, _repeatsM);
 
-            GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
         }
@@ -163,7 +164,6 @@ namespace RepeatAndLearn.ViewModel
 
             _storedProcedure.UpdateWordOnWrong(listOfRepeatsToDo, _randomNumber);
 
-            GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
         }
@@ -173,7 +173,6 @@ namespace RepeatAndLearn.ViewModel
 
             _storedProcedure.DeleteOldWord(WordToCheck, CorrectAnswer);
 
-            GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
             RandomWordToCheck();

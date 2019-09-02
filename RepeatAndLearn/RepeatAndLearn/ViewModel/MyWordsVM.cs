@@ -1,10 +1,6 @@
-﻿using Dapper;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using RepeatAndLearn.Model;
-using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -13,7 +9,7 @@ namespace RepeatAndLearn.ViewModel
 {
     class MyWordsVM : BindableBase
     {
-        private StoredProcedure _storedProcedure=new StoredProcedure();
+        private readonly StoredProcedure _storedProcedure=new StoredProcedure();
 
         private string _plWordToAdd="";
         public string PlWordToAdd
@@ -21,14 +17,8 @@ namespace RepeatAndLearn.ViewModel
             get => _plWordToAdd;
             set
             {
-                CanAddNewWord = true;
-                CanDeleteWord = false;
                 SetProperty(ref _plWordToAdd, value);
-                if (_plWordToAdd == "" || _enWordToAdd == "")
-                {
-                    CanAddNewWord = false;
-                    CanDeleteWord = false;
-                }
+                CheckIfCanAddWord();
             }
         }
 
@@ -38,15 +28,20 @@ namespace RepeatAndLearn.ViewModel
             get => _enWordToAdd;
             set
             {
-                CanAddNewWord = true;
-                CanDeleteWord = false;
                 SetProperty(ref _enWordToAdd, value);
-                if (_plWordToAdd == "" || _enWordToAdd == "")
-                {
-                    CanAddNewWord = false;
-                    CanDeleteWord = false;
-                }
+                CheckIfCanAddWord();
             }
+        }
+        private void CheckIfCanAddWord()
+        {
+            if (_plWordToAdd == "" || _enWordToAdd == "")
+            {
+                CanAddNewWord = false;
+                CanDeleteWord = false;
+                return;
+            }
+            CanAddNewWord = true;
+            CanDeleteWord = false;
         }
 
         private bool _canAddNewWord = false;
@@ -75,36 +70,29 @@ namespace RepeatAndLearn.ViewModel
 
         private void AddMyNewWord()
         {
-            if (!CheckIfCanAddMyNewWord()) return;
-
-            _storedProcedure.AddNewWord(PlWordToAdd, EnWordToAdd);
-
-            GlobalSettings.UpdateListOfWords();
             CanAddNewWord = false;
             CanDeleteWord = true;
+            if (!CheckIfCanAddMyNewWord()) return;
+            _storedProcedure.AddNewWord(PlWordToAdd, EnWordToAdd);
+           
         }
 
         private void DeleteMyOldWord()
         {
-            _storedProcedure.DeleteOldWord(PlWordToAdd, EnWordToAdd);
-            GlobalSettings.UpdateListOfWords();
             CanAddNewWord = true;
             CanDeleteWord = false;
+            _storedProcedure.DeleteOldWord(PlWordToAdd, EnWordToAdd);
         }
         private bool CheckIfCanAddMyNewWord()
         {
-            if (PlWordToAdd == "" || EnWordToAdd == "") return false;
+            //if (PlWordToAdd == "" || EnWordToAdd == "") return false;
             if (
               GlobalSettings.actualListOfWords.Any(x => x.EnWord == EnWordToAdd.ToLower().Trim()
                 && x.PlWord == PlWordToAdd.ToLower().Trim()))
             {
-                CanAddNewWord = false;
-                CanDeleteWord = true;
                 MessageBox.Show("To słówko już istnieje w twojej liście.");
                 return false;
             }
-            CanAddNewWord = true;
-            CanDeleteWord = false;
             return true;
         }
 

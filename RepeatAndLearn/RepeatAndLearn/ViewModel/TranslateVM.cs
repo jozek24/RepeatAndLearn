@@ -1,13 +1,8 @@
-﻿using Dapper;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using RepeatAndLearn.Model;
 using RestSharp;
-using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -15,6 +10,7 @@ namespace RepeatAndLearn.ViewModel
     class TranslateVM : BindableBase
     {
         private StoredProcedure _storedProcedure = new StoredProcedure();
+
         private string _wordToTranslate = "";
         public string WordToTranslate
         {
@@ -26,11 +22,6 @@ namespace RepeatAndLearn.ViewModel
                 CanDeleteWord = false;
 
                 SetProperty(ref _wordToTranslate, value);
-                if (_wordToTranslate == "")
-                {
-                    CanAddNewWord = false;
-                    CanDeleteWord = false;
-                }
             }
         }
 
@@ -84,6 +75,7 @@ namespace RepeatAndLearn.ViewModel
         {
             var client = new RestClient(
                 GlobalSettings.TranslateHttps + GlobalSettings.ApiKey);
+
             var request = new RestRequest(Method.GET);
             request.AddParameter("text", WordToTranslate);
             request.AddParameter("lang", LanguageDirection);
@@ -100,37 +92,42 @@ namespace RepeatAndLearn.ViewModel
             {
                 return;
             }
+
             if (LanguageDirection == "en-pl")
             {
-                if (
-                    GlobalSettings.actualListOfWords.Any(x => x.EnWord == WordToTranslate.ToLower().Trim()
-                    && x.PlWord == TranslatedWord.ToLower().Trim()))
+                if (CheckIfTheWordAlreadyExist(WordToTranslate, TranslatedWord))
                 {
                     CanAddNewWord = false;
                     CanDeleteWord = true;
                     return;
                 }
-                CanAddNewWord = true;
-                CanDeleteWord = false;
             }
             else
             {
-                if (
-                   GlobalSettings.actualListOfWords.Any(x => x.EnWord == TranslatedWord.ToLower().Trim()
-                   && x.PlWord == WordToTranslate.ToLower().Trim()))
+                if (CheckIfTheWordAlreadyExist(TranslatedWord, WordToTranslate))
                 {
                     CanAddNewWord = false;
                     CanDeleteWord = true;
                     return;
                 }
-                CanAddNewWord = true;
-                CanDeleteWord = false;
             }
+            CanAddNewWord = true;
+            CanDeleteWord = false;
+        }
+        private bool CheckIfTheWordAlreadyExist(string enWord, string plWord)
+        {
+            if (GlobalSettings.actualListOfWords.Any(x => x.EnWord == enWord.ToLower().Trim()
+                   && x.PlWord == plWord.ToLower().Trim()))
+            {
+                return true;
+            }
+            return false;
         }
         private void ChangeLanguageDirection()
         {
-            CanAddNewWord = false;
-            CanDeleteWord = false;
+            if(TranslatedWord!="")
+                WordToTranslate = TranslatedWord;
+
             LanguageDirection = (LanguageDirection == "en-pl") ? "pl-en" : "en-pl";
         }
 
@@ -144,8 +141,6 @@ namespace RepeatAndLearn.ViewModel
             {
                 _storedProcedure.AddNewWord(WordToTranslate, TranslatedWord);
             }
-
-            GlobalSettings.UpdateListOfWords();
             CanAddNewWord = false;
             CanDeleteWord = true;
         }
@@ -162,7 +157,6 @@ namespace RepeatAndLearn.ViewModel
             {
                 _storedProcedure.DeleteOldWord(WordToTranslate, TranslatedWord);
             }
-            GlobalSettings.UpdateListOfWords();
             CanAddNewWord = true;
             CanDeleteWord = false;
         }
