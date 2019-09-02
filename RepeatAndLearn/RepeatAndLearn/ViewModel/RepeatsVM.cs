@@ -14,6 +14,7 @@ namespace RepeatAndLearn.ViewModel
 {
     class RepeatsVM : BindableBase
     {
+        private RepeatsM _repeatsM = new RepeatsM();
         private List<Word> listOfRepeatsToDo;
         private Random random = new Random();
         private int _randomNumber;
@@ -145,7 +146,7 @@ namespace RepeatAndLearn.ViewModel
                     param.Add(
                         "@dateOfNextRepeat",
                     listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
-                          .AddDays(DaysToNextRepeat(
+                          .AddDays(_repeatsM.DaysToNextRepeat(
                               listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
                               listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats)
                               ));
@@ -186,34 +187,7 @@ namespace RepeatAndLearn.ViewModel
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
         }
-        private int DaysToNextRepeat(int totalRepeats, int currentRepeats)
-        {
-            if (totalRepeats <= 1)
-            {
-                if (currentRepeats <= 2)
-                    return 5;
-
-                return 2;
-            }
-            else if (totalRepeats >= 2 && totalRepeats <= 5)
-            {
-                if (currentRepeats <= 2)
-                    return 14;
-                return 10;
-            }
-            else if (totalRepeats >= 6 && totalRepeats <= 9)
-            {
-                if (currentRepeats <= 2)
-                    return 31;
-                return 18;
-            }
-            else
-            {
-                if (currentRepeats < 2)
-                    return 100;
-                return 365;
-            }
-        }
+        
         private void DeleteTranslatedOldWord()
         {
 
