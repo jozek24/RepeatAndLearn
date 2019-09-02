@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -73,6 +74,13 @@ namespace RepeatAndLearn.ViewModel
             set => SetProperty(ref _myAnswer, value);
         }
 
+        private bool _isEnable = true;
+        public bool IsEnabled
+        {
+            get => _isEnable;
+            set => SetProperty(ref _isEnable, value);
+        }
+
         public RepeatsVM()
         {
             GetListOfWordsToRepeatAndSetAmount();
@@ -99,6 +107,22 @@ namespace RepeatAndLearn.ViewModel
         {
             _listOfRepeatsToDo = GlobalSettings.ActualListOfWords.Where(x => x.DateOfNextRepeat.Date < DateTime.Now).ToList();
 
+            if (!_listOfRepeatsToDo.Any())
+            {
+                NumberOfRepeats = 0;
+                IsEnabled = false;
+                WordToCheck = "Gratulacje. Zrobiłeś wszyskie powtórki na dzisiaj. Wróć jutro bądź dodaj nowe.";
+                return;
+            }
+            if(IsEnabled==false)
+            {
+                IsEnabled = true;
+                RandomWordToCheck();
+                MyAnswer = "";
+                Colour = "White";
+            }
+            IsEnabled = true;
+
             NumberOfRepeats = _listOfRepeatsToDo.Count;
             if (_listOfRepeatsToDo.Count > MaxNumberOfRepeats)
                 MaxNumberOfRepeats = _listOfRepeatsToDo.Count;
@@ -107,9 +131,12 @@ namespace RepeatAndLearn.ViewModel
 
         private void RandomWordToCheck()
         {
-            _randomNumber = _random.Next(_listOfRepeatsToDo.Count);
-            WordToCheck = _listOfRepeatsToDo[_randomNumber].PlWord;
-            CorrectAnswer = _listOfRepeatsToDo[_randomNumber].EnWord;
+            if (IsEnabled == true)
+            {
+                _randomNumber = _random.Next(_listOfRepeatsToDo.Count);
+                WordToCheck = _listOfRepeatsToDo[_randomNumber].PlWord;//tutaj
+                CorrectAnswer = _listOfRepeatsToDo[_randomNumber].EnWord;
+            }
         }
 
         private void CheckAnswer()

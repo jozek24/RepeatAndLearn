@@ -41,7 +41,7 @@
                 <TextBlock 
                        Margin="3"
                        FontSize="15"
-                       Text="{Binding WordToCheck}">
+                       Text="{Binding WordToCheck,Mode=TwoWay}">
                 </TextBlock>
             </StackPanel>
         </Border>
@@ -51,6 +51,7 @@
             <TextBox
                      Text="{Binding MyAnswer, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      FontSize="15"
+                     IsEnabled="{Binding IsEnabled}"
                      Background="{Binding Colour}"
                      controls:TextBoxHelper.Watermark="Wpisz tłumaczenie"
                      controls:TextBoxHelper.ClearTextButton="True">
@@ -60,6 +61,7 @@
         <Button Grid.Row="1" Grid.Column="1"  
                 Command="{Binding CheckAnswerCommand}"
                                 MinHeight="40" MinWidth="40"
+                                IsEnabled="{Binding IsEnabled}"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern question}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -68,6 +70,7 @@
                  Visibility="{Binding AnswerButtonsVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Background="Red"
                                 MinHeight="40" MinWidth="40"
+                                IsEnabled="{Binding IsEnabled}"
                                 BorderBrush="Black"
                                 Content="{iconPacks:Modern Minus}"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
