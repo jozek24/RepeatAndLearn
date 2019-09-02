@@ -31,23 +31,31 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="">
-            <TextBlock  Grid.Row="0" Grid.Column="0" 
-                        Margin="3"
-                        FontSize="15"
-                        Text="{Binding WordToCheck}">
-            </TextBlock>
-        </GroupBox>
-        <GroupBox x:Name="AnswerTextBox" Grid.Row="1" Grid.Column="0"
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2">
+            <StackPanel Orientation="Vertical">
+                <controls:MetroProgressBar MinHeight="10" 
+                                           Minimum="0" 
+                                           Maximum="{Binding MaxNumberOfRepeats}"  
+                                           Value="{Binding NumberOfRepeatsToDo}" 
+                                           Background="Orange"/>
+                <TextBlock 
+                       Margin="3"
+                       FontSize="15"
+                       Text="{Binding WordToCheck}">
+                </TextBlock>
+            </StackPanel>
+        </Border>
+        <GroupBox Grid.Row="1" Grid.Column="0"
                   Header="{Binding NumberOfRepeats}" 
-                  HeaderStringFormat="Powtórki - {0}">
-            <TextBox Grid.Row="1" Grid.Column="0" 
+                  HeaderStringFormat="Powtórki do wykonania - {0}">
+            <TextBox 
                      Text="{Binding MyAnswer, Mode=TwoWay}"
                      FontSize="15"
                      Background="{Binding Colour}"
                      controls:TextBoxHelper.Watermark="Wpisz tłumaczenie"
                      controls:TextBoxHelper.ClearTextButton="True"/>
         </GroupBox>
+
 
         <Button Grid.Row="1" Grid.Column="1"  
                 Command="{Binding CheckAnswerCommand}"

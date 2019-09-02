@@ -1,13 +1,10 @@
-﻿using Dapper;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using RepeatAndLearn.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -19,6 +16,20 @@ namespace RepeatAndLearn.ViewModel
         private List<Word> listOfRepeatsToDo;
         private Random random = new Random();
         private int _randomNumber;
+
+        private int _maxNumberOfRepeats;
+        public int MaxNumberOfRepeats
+        {
+            get => _maxNumberOfRepeats;
+            set => SetProperty(ref _maxNumberOfRepeats, value);
+        }
+
+        private int _numberOfRepeatsToDo;
+        public int NumberOfRepeatsToDo
+        {
+            get => _numberOfRepeatsToDo;
+            set => SetProperty(ref _numberOfRepeatsToDo, value);
+        }
 
         private string _colour = "White";
         public string Colour
@@ -75,6 +86,9 @@ namespace RepeatAndLearn.ViewModel
             GetListOfWordsToRepeatAndSetAmount();
             RandomWordToCheck();
 
+            MaxNumberOfRepeats = NumberOfRepeats;
+            NumberOfRepeatsToDo = MaxNumberOfRepeats - NumberOfRepeats;
+
             CheckAnswerCommand = new DelegateCommand(CheckAnswer);
             MyAnswerWrongCommand = new DelegateCommand(MyAnswerWrong);
             MyAnswerCorrectCommand = new DelegateCommand(MyAnswerCorrect);
@@ -124,6 +138,7 @@ namespace RepeatAndLearn.ViewModel
             RandomWordToCheck();
             MyAnswer = "";
             Colour = "White";
+            NumberOfRepeatsToDo = MaxNumberOfRepeats - NumberOfRepeats;
         }
 
         private void MyAnswerWrong()
