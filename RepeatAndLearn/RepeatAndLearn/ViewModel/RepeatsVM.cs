@@ -89,12 +89,20 @@ namespace RepeatAndLearn.ViewModel
             MaxNumberOfRepeats = NumberOfRepeats;
             NumberOfRepeatsToDo = MaxNumberOfRepeats - NumberOfRepeats;
 
+            GlobalSettings.WordsChange += GlobalSettings_WordsChange;
+
             CheckAnswerCommand = new DelegateCommand(CheckAnswer);
             MyAnswerWrongCommand = new DelegateCommand(MyAnswerWrong);
             MyAnswerCorrectCommand = new DelegateCommand(MyAnswerCorrect);
             DeleteTranslatedWordCommand = new DelegateCommand(DeleteTranslatedOldWord);
 
         }
+
+        private void GlobalSettings_WordsChange(object sender, EventArgs e)
+        {
+            GetListOfWordsToRepeatAndSetAmount();
+        }
+
         public ICommand CheckAnswerCommand { get; }
         public ICommand MyAnswerWrongCommand { get; }
         public ICommand MyAnswerCorrectCommand { get; }
@@ -106,6 +114,8 @@ namespace RepeatAndLearn.ViewModel
         {
             listOfRepeatsToDo = GlobalSettings.actualListOfWords.Where(x => x.DateOfNextRepeat.Date < DateTime.Now).ToList();
             NumberOfRepeats = listOfRepeatsToDo.Count;
+            if (listOfRepeatsToDo.Count > MaxNumberOfRepeats)
+                MaxNumberOfRepeats = listOfRepeatsToDo.Count;
         }
         private void RandomWordToCheck()
         {
@@ -155,16 +165,12 @@ namespace RepeatAndLearn.ViewModel
         private void UpdateListOnCorrectAnswer()
         {
             _storedProcedure.UpdateWordOnCorrect(listOfRepeatsToDo, _randomNumber, _repeatsM);
-
-            GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
         }
         private void UpdateListOnWrongAnswer()
         {
 
             _storedProcedure.UpdateWordOnWrong(listOfRepeatsToDo, _randomNumber);
-
-            GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
         }
         
@@ -172,8 +178,6 @@ namespace RepeatAndLearn.ViewModel
         {
 
             _storedProcedure.DeleteOldWord(WordToCheck, CorrectAnswer);
-
-            GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
             RandomWordToCheck();
             MyAnswer = "";

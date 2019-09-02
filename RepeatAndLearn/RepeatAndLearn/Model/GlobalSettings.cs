@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace RepeatAndLearn.Model
         public const string TranslateHttps = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=";
 
         public static List<Word> actualListOfWords;
+
+        public static event EventHandler WordsChange;
+        private static void WordsChanged()
+            => WordsChange?.Invoke(null, new EventArgs());
+
+
         static GlobalSettings()
         {
             UpdateListOfWords();
@@ -25,6 +32,7 @@ namespace RepeatAndLearn.Model
             {
                 actualListOfWords = connection.Query<Word>(sqlWordsSelect).ToList();
             }
+            WordsChanged();
         }
     }
 }
