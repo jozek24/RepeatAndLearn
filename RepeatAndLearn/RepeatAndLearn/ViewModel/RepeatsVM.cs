@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 namespace RepeatAndLearn.ViewModel
@@ -110,6 +109,7 @@ namespace RepeatAndLearn.ViewModel
             if (!_listOfRepeatsToDo.Any())
             {
                 NumberOfRepeats = 0;
+                NumberOfRepeatsToDoToday = MaxNumberOfRepeats;
                 IsEnabled = false;
                 WordToCheck = "Gratulacje. Zrobiłeś wszyskie powtórki na dzisiaj. Wróć jutro bądź dodaj nowe.";
                 return;
