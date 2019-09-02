@@ -15,6 +15,7 @@ namespace RepeatAndLearn.ViewModel
     class RepeatsVM : BindableBase
     {
         private RepeatsM _repeatsM = new RepeatsM();
+        private StoredProcedure _storedProcedure = new StoredProcedure();
         private List<Word> listOfRepeatsToDo;
         private Random random = new Random();
         private int _randomNumber;
@@ -119,7 +120,7 @@ namespace RepeatAndLearn.ViewModel
             if (AnswerButtonsVisibility == false)
                 return;
             UpdateListOnCorrectAnswer();
-            listOfRepeatsToDo.RemoveAt(_randomNumber);
+
             RandomWordToCheck();
             MyAnswer = "";
             Colour = "White";
@@ -136,28 +137,8 @@ namespace RepeatAndLearn.ViewModel
         }
         private void UpdateListOnCorrectAnswer()
         {
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    param.Add("@idOfWord", listOfRepeatsToDo[_randomNumber].IdWord);
-                    param.Add(
-                        "@dateOfNextRepeat",
-                    listOfRepeatsToDo[_randomNumber].DateOfNextRepeat
-                          .AddDays(_repeatsM.DaysToNextRepeat(
-                              listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats,
-                              listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats)
-                              ));
-                    param.Add("@totalAmountOfRepeats", listOfRepeatsToDo[_randomNumber].TotalAmountOfRepeats + 1);
-                    connection.Execute("UpdateWordOnCorrect", param, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            _storedProcedure.UpdateWordOnCorrect(listOfRepeatsToDo, _randomNumber, _repeatsM);
+
             GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
@@ -165,24 +146,8 @@ namespace RepeatAndLearn.ViewModel
         private void UpdateListOnWrongAnswer()
         {
 
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    param.Add("@idOfWord", listOfRepeatsToDo[_randomNumber].IdWord);
+            _storedProcedure.UpdateWordOnWrong(listOfRepeatsToDo, _randomNumber);
 
-                    param.Add(
-                        "@dateOfNextRepeat", DateTime.Now);
-                    param.Add("@currentAmountOfRepeats", listOfRepeatsToDo[_randomNumber].CurrentAmountOfRepeats+1);
-                    connection.Execute("UpdateWordOnWrong", param, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
             GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;
@@ -191,23 +156,8 @@ namespace RepeatAndLearn.ViewModel
         private void DeleteTranslatedOldWord()
         {
 
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    param.Add("@plWord", WordToCheck);
-                    param.Add("@enWord", CorrectAnswer);
+            _storedProcedure.DeleteOldWord(WordToCheck, CorrectAnswer);
 
-                    connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-            }
             GlobalSettings.UpdateListOfWords();
             GetListOfWordsToRepeatAndSetAmount();
             AnswerButtonsVisibility = false;

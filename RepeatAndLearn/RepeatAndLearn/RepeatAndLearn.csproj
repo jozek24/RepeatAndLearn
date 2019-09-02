@@ -94,6 +94,7 @@
     <Compile Include="Model\Word.cs" />
     <Compile Include="ViewModel\MyWordsVM.cs" />
     <Compile Include="ViewModel\RepeatsVM.cs" />
+    <Compile Include="ViewModel\StoredProcedure.cs" />
     <Compile Include="ViewModel\TranslateVM.cs" />
     <Compile Include="View\MyWordsTab.xaml.cs">
       <DependentUpon>MyWordsTab.xaml</DependentUpon>

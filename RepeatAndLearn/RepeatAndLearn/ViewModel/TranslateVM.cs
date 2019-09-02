@@ -14,7 +14,8 @@ namespace RepeatAndLearn.ViewModel
 {
     class TranslateVM : BindableBase
     {
-        private string _wordToTranslate ="";
+        private StoredProcedure _storedProcedure = new StoredProcedure();
+        private string _wordToTranslate = "";
         public string WordToTranslate
         {
             get => _wordToTranslate;
@@ -33,7 +34,7 @@ namespace RepeatAndLearn.ViewModel
             }
         }
 
-        private string _translatedWord="";
+        private string _translatedWord = "";
         public string TranslatedWord
         {
             get => _translatedWord;
@@ -82,7 +83,7 @@ namespace RepeatAndLearn.ViewModel
         private void Execute()
         {
             var client = new RestClient(
-                "https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + GlobalSettings.ApiKey);
+                GlobalSettings.TranslateHttps + GlobalSettings.ApiKey);
             var request = new RestRequest(Method.GET);
             request.AddParameter("text", WordToTranslate);
             request.AddParameter("lang", LanguageDirection);
@@ -135,37 +136,13 @@ namespace RepeatAndLearn.ViewModel
 
         private void AddTranslatedNewWord()
         {
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+            if (LanguageDirection == "en-pl")
             {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    if (LanguageDirection == "en-pl")
-                    {
-                        param.Add("@plWord", TranslatedWord.ToLower().Trim());
-                        param.Add("@enWord", WordToTranslate.ToLower().Trim());
-                        param.Add("@dateOfNextRepeat", DateTime.Now);
-                        param.Add("@currentAmountOfRepeats", 0);
-                        param.Add("@totalAmountOfRepeats", 0);
-
-                        connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
-                    }
-                    else
-                    {
-                        param.Add("@plWord", WordToTranslate.ToLower().Trim());
-                        param.Add("@enWord", TranslatedWord.ToLower().Trim());
-                        param.Add("@dateOfNextRepeat", DateTime.Now);
-                        param.Add("@currentAmountOfRepeats", 0);
-                        param.Add("@totalAmountOfRepeats", 0);
-
-                        connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                _storedProcedure.AddNewWord(TranslatedWord, WordToTranslate);
+            }
+            else
+            {
+                _storedProcedure.AddNewWord(WordToTranslate, TranslatedWord);
             }
 
             GlobalSettings.UpdateListOfWords();
@@ -177,31 +154,13 @@ namespace RepeatAndLearn.ViewModel
         private void DeleteTranslatedOldWord()
         {
 
-            using (var connection = new SqlConnection(
-                "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
+            if (LanguageDirection == "en-pl")
             {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    if (LanguageDirection == "en-pl")
-                    {
-                        param.Add("@plWord", TranslatedWord);
-                        param.Add("@enWord", WordToTranslate);
-
-                        connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
-                    }
-                    else
-                    {
-                        param.Add("@plWord", WordToTranslate);
-                        param.Add("@enWord", TranslatedWord);
-
-                        connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                _storedProcedure.DeleteOldWord(TranslatedWord, WordToTranslate);
+            }
+            else
+            {
+                _storedProcedure.DeleteOldWord(WordToTranslate, TranslatedWord);
             }
             GlobalSettings.UpdateListOfWords();
             CanAddNewWord = true;

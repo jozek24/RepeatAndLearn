@@ -8,6 +8,9 @@ namespace RepeatAndLearn.Model
     public static class GlobalSettings
     {
         public const string ApiKey = "trnsl.1.1.20190821T170155Z.fafa71ea078787a0.bbbe06c23ca22760e5f05eb512ae2b37f7c110f1";
+        public const string ConnectionString = "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;";
+        public const string TranslateHttps = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=";
+
         public static List<Word> actualListOfWords;
         static GlobalSettings()
         {

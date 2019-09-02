@@ -13,6 +13,7 @@ namespace RepeatAndLearn.ViewModel
 {
     class MyWordsVM : BindableBase
     {
+        private StoredProcedure _storedProcedure=new StoredProcedure();
 
         private string _plWordToAdd="";
         public string PlWordToAdd
@@ -76,25 +77,7 @@ namespace RepeatAndLearn.ViewModel
         {
             if (!CheckIfCanAddMyNewWord()) return;
 
-            using (var connection = new SqlConnection(
-              "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    param.Add("@plWord", PlWordToAdd.ToLower().Trim());
-                    param.Add("@enWord", EnWordToAdd.ToLower().Trim());
-                    param.Add("@dateOfNextRepeat", DateTime.Now);
-                    param.Add("@currentAmountOfRepeats", 0);
-                    param.Add("@totalAmountOfRepeats", 0);
-
-                    connection.Execute("AddNewWord", param, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            _storedProcedure.AddNewWord(PlWordToAdd, EnWordToAdd);
 
             GlobalSettings.UpdateListOfWords();
             CanAddNewWord = false;
@@ -103,23 +86,7 @@ namespace RepeatAndLearn.ViewModel
 
         private void DeleteMyOldWord()
         {
-            using (var connection = new SqlConnection(
-               "Data Source=LAPTOP-912THUH4;Initial Catalog=RepeatAndLearnDictionary;Integrated Security=true;"))
-            {
-                DynamicParameters param = new DynamicParameters();
-                try
-                {
-                    param.Add("@plWord", PlWordToAdd);
-                    param.Add("@enWord", EnWordToAdd);
-
-                    connection.Execute("DeleteOldWord", param, commandType: CommandType.StoredProcedure);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-            }
+            _storedProcedure.DeleteOldWord(PlWordToAdd, EnWordToAdd);
             GlobalSettings.UpdateListOfWords();
             CanAddNewWord = true;
             CanDeleteWord = false;
